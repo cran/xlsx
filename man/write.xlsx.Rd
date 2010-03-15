@@ -6,7 +6,7 @@ Write a \code{data.frame} to an Excel 2007 workbook.
 }
 \usage{
 write.xlsx(x, file, sheetName="Sheet 1", formatTemplate=NULL,
-  col.names=TRUE, row.names=TRUE)
+  col.names=TRUE, row.names=TRUE, append=FALSE)
 }
 \arguments{
   \item{x}{a \code{data.frame} to write to the workbook.}
@@ -19,6 +19,9 @@ write.xlsx(x, file, sheetName="Sheet 1", formatTemplate=NULL,
     \code{x} are to be written along with \code{x} to the file.}
   \item{row.names}{a logical value indicating whether the row names of 
     \code{x} are to be written along with \code{x} to the file.}
+  \item{append}{a logical value indicating if \code{x} should be
+    appended to an existing file.  If \code{TRUE} the file is read
+    from disk.}
 }
 
 \details{

@@ -3,7 +3,7 @@
 #
 
 write.xlsx <- function(x, file, sheetName="Sheet 1", formatTemplate=NULL,
-  col.names=TRUE, row.names=TRUE)
+  col.names=TRUE, row.names=TRUE, append=FALSE)
 {
   iOffset <- jOffset <- 0
   if (col.names)
@@ -13,8 +13,13 @@ write.xlsx <- function(x, file, sheetName="Sheet 1", formatTemplate=NULL,
     
   noRows <- nrow(x) + iOffset
   noCols <- ncol(x) + jOffset
+
+  if (append){
+    wb <- loadWorkbook(file)
+  } else {
+    wb <- createWorkbook()
+  }
   
-  wb <- createWorkbook()
   sheet <- createSheet(wb, sheetName)
 
   rows  <- createRow(sheet, 1:noRows)      # create rows 

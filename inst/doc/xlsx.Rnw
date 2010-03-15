@@ -3,11 +3,11 @@
 % \VignetteKeywords{spreadsheet, Excel 2007, java}
 % \VignettePackage{xlsx}
 
-% setwd('H:/user/R/Adrian/findataweb/temp/xlsx/inst/doc/')
+% setwd('H:/user/R/Adrian/findataweb/temp/xlsx/trunk/inst/doc/')
 % Sweave('xlsx.Rnw');system("mypdflatex xlsx")
 
-%\documentclass{article}
-\documentclass[nofootinbib]{revtex4}
+\documentclass[10pt]{article}
+%\documentclass[nofootinbib]{revtex4}
 
 \usepackage{Sweave}
 \usepackage{hyperref}
@@ -29,12 +29,30 @@
 \newcommand{\code}[1]{{\texttt{#1}}}
 \newcommand{\file}[1]{{\texttt{#1}}}
 
-\begin{document}
+\textwidth       178mm
+\oddsidemargin     0in
+  \advance\oddsidemargin by -1in
+  \advance\oddsidemargin by 19mm
+\evensidemargin    0in
+  \advance\evensidemargin by -1in
+  \advance\evensidemargin by 19mm
+\textheight        9.25in     %   9.75in is the max
+\topmargin         0in
+  \advance\topmargin by 0in  % -0.5in the max you can go
+\headheight        0pt
+\headsep           0pt
+\topskip           0pt
+
 
 \title{Read, write, format Excel 2007 (xlsx) files}
 \author{Adrian A. Dr\u{a}gulescu}
-\email{adrian.dragulescu@gmail.com}
-\date{\today, last modified on 2009-12-28}
+%\email{adrian.dragulescu@gmail.com}
+\date{\small{last compiled \today; last modified on 2009-12-28}}
+
+
+\begin{document}
+
+\maketitle
 
 \begin{abstract}
 The \code{xlsx} package provides tools neccessary to interact with 
@@ -46,7 +64,6 @@ a java library from the Apache POI project.
 \end{abstract}
 %\pacs{R, Excel 2007, Java, }
 
-\maketitle
 \tableofcontents
 
 <<setup, echo=FALSE, results=hide>>=
@@ -187,9 +204,7 @@ ISBN 3-900051-07-0, URL \url{http://www.R-project.org}
   \emph{rJava: Low-level R to Java interface.} R package version 0.8-1.
   \url{http://CRAN.R-project.org/package=rJava}
   
-    
-  
-  
 \end{thebibliography}
+
 
 \end{document}

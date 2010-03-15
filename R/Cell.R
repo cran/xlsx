@@ -19,19 +19,29 @@ createCell <- function(row, colIndex=1:5)
 # Get the cells for a list of rows.  Users who want basic things only
 # don't need to use this function. 
 # 
-getCells <- function(row, simplify=TRUE)
+getCells <- function(row, colIndex=NULL, simplify=TRUE)
 {
+  nC  <- length(colIndex)
+  if (!is.null(colIndex))
+    colIx <- as.integer(colIndex-1)     # ugly, have to do it here
+ 
   res <- row
   for (ir in seq_along(row)){
-    minColIx <- .jcall(row[[ir]], "T", "getFirstCellNum")   # 0-based
-    maxColIx <- .jcall(row[[ir]], "T", "getLastCellNum")-1  # 0-based
-    indCol   <- seq.int(minColIx, maxColIx)                  # actual col index
-    rowCells <- vector("list", length=(maxColIx-minColIx+1))
-    namesCells <- vector("character", length=(maxColIx-minColIx+1))
+    if (is.null(colIndex)){                           # get all columns
+      minColIx <- .jcall(row[[ir]], "T", "getFirstCellNum")   # 0-based
+      maxColIx <- .jcall(row[[ir]], "T", "getLastCellNum")-1  # 0-based
+      colIx    <- seq.int(minColIx, maxColIx)        # actual col index
+    }
+    nC <- length(colIx)
+    rowCells <- vector("list", length=nC)
+    namesCells <- vector("character", length=nC)
     for (ic in seq_along(rowCells)){
-      rowCells[[ic]] <- .jcall(row[[ir]],
-        "Lorg/apache/poi/xssf/usermodel/XSSFCell;", "getCell", indCol[ic])
-      namesCells[ic] <- .jcall(rowCells[[ic]], "I", "getColumnIndex")+1
+      aux <- .jcall(row[[ir]], "Lorg/apache/poi/xssf/usermodel/XSSFCell;",
+        "getCell", colIx[ic])
+      if (!is.null(aux)){
+        rowCells[[ic]] <- aux
+        namesCells[ic] <- .jcall(aux, "I", "getColumnIndex")+1
+      }
     }
     names(rowCells) <- namesCells  # need namesCells if spreadsheet is ragged
     res[[ir]] <- rowCells
@@ -92,6 +102,54 @@ getCellValue <- function(cell, keepFormulas=FALSE)
 
   value
 }
+
+
+######################################################################
+# get values for a block
+# How do conversion work?
+#
+getMatrixValues <- function(sheet, rowIndex, colIndex)
+{
+  nr <- length(rowIndex)
+  nc <- length(colIndex)
+  rows  <- getRows(sheet, rowIndex=rowIndex)
+  cells <- getCells(rows, colIndex=colIndex)
+  
+  cc <- lapply(cells, getCellValue)
+  cc <- unlist(cc)
+  if (length(cc)==nr*nc){        # you don't have missing cells 
+    cc <- matrix(cc, nrow=nr, ncol=nc, byrow=TRUE, 
+                 dimnames=list(rowIndex, colIndex))
+  } else {                       # you have some missing cells
+    VV <- matrix(NA, nrow=nr, ncol=nc,
+                 dimnames=list(rowIndex, colIndex))
+    
+    ind  <- lapply(strsplit(names(cc), "\\."), as.numeric)
+    indM <- do.call(rbind, ind)
+    # you need this for indexing, to go from labels to indices
+    indM <- apply(indM, 2, function(x){as.numeric(as.factor(x))})
+    VV[indM] <- cc
+    cc <- VV    
+  }
+
+  return(cc)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ######################################################################

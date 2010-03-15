@@ -1,4 +1,5 @@
-\name{Worksheet}
+\name{Sheet}
+\alias{Sheet}
 \alias{Worksheet}
 \alias{createSheet}
 \alias{removeSheet}

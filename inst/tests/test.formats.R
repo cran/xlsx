@@ -5,50 +5,71 @@
 test.formats <- function(outdir="C:/Temp/")
 {  
   require(xlsx)
+  cat("##################################################\n")
+  cat("Testing COLORS, FILLS, BORDERS ...\n")
+  cat("##################################################\n")
+  
 
-  ##########################################################################
-  cat("TEST COLORS, FILLS, BORDERS ...\n")
-  ##########################################################################
-
+  cat("Create an empty workbook ... ") 
   wb <- createWorkbook()
   sheet <- createSheet(wb, "Sheet1")
+  cat("OK\n")
 
-  rows  <- createRow(sheet, 1:10)          # 10 rows
+  
+  cat("Create 10 rows ... ") 
+  rows  <- createRow(sheet, 1:10)         
+  cat("OK\n")
 
+  
+  cat("Create cell[1,1] ... ") 
   cell.1 <- createCell(rows[1], colIndex=1)[[1,1]]     
   setCellValue(cell.1, "Thick bottom border, lavender background")
+  cat("OK\n")
 
-  cat("Set cell [1,1] with bottom thick border, fill with lavender.\n")
+  cat("Set cell [1,1] with bottom thick border, fill with lavender ... ")
   cellStyle1 <- createCellStyle(wb, borderPosition="BOTTOM",
     borderPen="BORDER_THICK", fillBackgroundColor="lavender",
     fillForegroundColor="lavender", fillPattern="SOLID_FOREGROUND")
   setCellStyle(cell.1, cellStyle1)   # does not set the background?!
+  cat("OK\n")
 
+  
+  cat("Create cell[3,1] ... ") 
   cell.2 <- createCell(rows[3], col=1)[[1,1]]      
   setCellValue(cell.2, "Dashed right border, yellow fill, red hashes")
   cellStyle2 <- createCellStyle(wb, borderPosition="RIGHT",
     borderPen="BORDER_DASHED", fillBackgroundColor="yellow",
     fillForegroundColor="tomato", fillPattern="BIG_SPOTS")
-
   setCellStyle(cell.2, cellStyle2)   # does not set the background?!
+  cat("OK\n")
 
 
+  cat("Create cell[5,1] ... ") 
   cell.3 <- createCell(rows[5], col=1)[[1,1]]      
   setCellValue(cell.3, "Courier New, Italicised")
-
   font3 <- createFont(wb, fontHeightInPoints=20, isBold=TRUE, isItalic=TRUE,
     fontName="Courier New", color="tomato")
   cellStyle3 <- createCellStyle(wb, fillBackgroundColor="skyblue",
     fillForegroundColor="skyblue", fillPattern="SOLID_FOREGROUND",
     font=font3)
-
   setCellStyle(cell.3, cellStyle3)   # does not set the background?!
+  cat("OK\n")
 
+  
+  cat("Autosize first column ... ") 
   autoSizeColumn(sheet, 1)  # test autosizing
+  cat("OK\n")
 
+  
   file <- paste(outdir, "test_export_colors.xlsx", sep="")
   saveWorkbook(wb, file)
   cat("Wrote file ", file, "\n\n")
+  cat("Please check the file if OK\n")
+  
+}
+
+
+
 
 
   #########################################################################
@@ -65,8 +86,6 @@ test.formats <- function(outdir="C:/Temp/")
 ##   rts <- .jcall(cHelper, "Lorg/apache/poi/ss/usermodel/RichTextString;",
 ##     "createRichTextString", x)
 ##   cmnt2 <- createComment(rts, row, col, sheet, author="Plato")
-  
-}
 
 
 ## wb <- createWorkbook()

@@ -24,8 +24,8 @@ createRow <- function(sheet, rowIndex=1:5)
 getRows <- function(sheet, rowIndex=NULL)
 {
   noRows <- sheet$getLastRowNum()+1
-  
-  keep <- seq_len(noRows)
+
+  keep <- as.integer(seq_len(noRows)-1)
   if (!is.null(rowIndex))
     keep <- keep[rowIndex]
 
@@ -33,11 +33,16 @@ getRows <- function(sheet, rowIndex=NULL)
   namesRow <- rep(NA, length(keep))
 
   for (ir in seq_along(keep)){
-    rows[[ir]] <- .jcall(sheet, "Lorg/apache/poi/ss/usermodel/Row;",
-      "getRow", as.integer(keep[ir]-1))
-    namesRow[ir] <- .jcall(rows[[ir]], "I", "getRowNum")
+    aux <- .jcall(sheet, "Lorg/apache/poi/ss/usermodel/Row;",
+      "getRow", keep[ir])
+    if (!is.null(aux)){
+      rows[[ir]] <- aux
+      namesRow[ir] <- .jcall(aux, "I", "getRowNum") + 1
+    }
   }
-  names(rows) <- namesRow+1  # in R convention
+  names(rows) <- namesRow   # need this if rows are ragged
+
+  rows <- rows[!is.na(namesRow)]   # skip the empty rows
   
   rows
 }

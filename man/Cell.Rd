@@ -4,6 +4,7 @@
 \alias{getCells}
 \alias{setCellValue}
 \alias{getCellValue}
+\alias{getMatrixValues}
 \title{Functions to manipulate cells.}
 \description{
 Functions to manipulate cells. 
@@ -12,17 +13,19 @@ Functions to manipulate cells.
 
 createCell(row, colIndex=1:5)
 
-getCells(row, simplify=TRUE)
+getCells(row, colIndex=NULL, simplify=TRUE)
 
 setCellValue(cell, value, richTextString=FALSE)
 
 getCellValue(cell, keepFormulas=FALSE)
 
+getMatrixValues(sheet, rowIndex, colIndex)
+
 }
 \arguments{
   \item{row}{a list of row objects. See \code{Row}.}
-  \item{colIndex}{a numeric vector specifying the index of columns to
-    create.}
+  \item{rowIndex}{a numeric vector specifying the index of rows.}
+  \item{colIndex}{a numeric vector specifying the index of columns.}
   \item{simplify}{a logical value.  If \code{TRUE}, the result will be
     unlisted.}
   \item{value}{an R variable of length one.}
@@ -30,7 +33,8 @@ getCellValue(cell, keepFormulas=FALSE)
     be inserted into the Excel cell as rich text.}
   \item{keepFormulas}{a logical value.  If \code{TRUE} the formulas will 
     be returned as characters instead of being explicitly evaluated.}
-  \item{cell}{an object of type \code{Cell}.}
+  \item{cell}{a \code{Cell} object.}
+  \item{sheet}{a \code{Sheet} object.}
 }
 
 \value{
@@ -41,11 +45,21 @@ getCellValue(cell, keepFormulas=FALSE)
   of the rows and the \code{colIndex} variable.
     
   \code{getCells} returns a list of java object references for all the
-  cells in the row. 
+  cells in the row if \code{colIndex} is \code{NULL}.  If you want to
+  extract only a specific columns, set \code{colIndex} to the column 
+  indices you are interested.
   
   \code{getCellValue} returns the value in the cell as an R object.
   Type conversions are done behind the scene.  This function is not
-  vectorized. 
+  vectorized.
+  
+  \code{getMatrixValues} is useful to extract blocks of similar cells
+  from a spreadsheet.  The result is a matrix.  This is a higher
+  function that is often needed.  If the \code{rowIndex} or
+  \code{colIndex} exceed the data of the sheet, \code{NA}'s will be
+  returned. 
+
+  
 }
 \details{
   \code{setCellValue} writes the content of an R variable into the cell.
@@ -55,7 +69,8 @@ getCellValue(cell, keepFormulas=FALSE)
 }
 
 \author{Adrian Dragulescu}
-\seealso{To format cells, see \code{\link{CellStyle}}.}
+\seealso{To format cells, see \code{\link{CellStyle}}.  For rows see
+  \code{\link{Rows}}, for sheets see \code{\link{Sheet}}.}
 \examples{
 
 file <- system.file("tests", "test_import.xlsx", package = "xlsx")
@@ -63,12 +78,16 @@ file <- system.file("tests", "test_import.xlsx", package = "xlsx")
 wb <- loadWorkbook(file)  
 sheets <- getSheets(wb)
 
-sheet <- sheets[[2]]      # get second sheet
+sheet <- sheets[['mixedTypes']]      # get second sheet
 rows  <- getRows(sheet)   # get all the rows
 
 cells <- getCells(rows)   # returns all non empty cells
 
 values <- lapply(cells, getCellValue) # extract the values
+
+# get a matrix of elements (converted to character)
+ vv <- getMatrixValues(sheet, 2:3, 1:3)
+
 
 }
 

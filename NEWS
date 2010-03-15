@@ -1,0 +1,21 @@
+NEWS for package xlsx
+
+Changes in version 0.1.3  (released 2010-03-15)
+
+ o Added indCol argument to getCells in case you want to get only a
+ subset of columns. 
+
+ o Added function getMatrixValue to extract blocks of data from the sheet.
+
+ o Improved and expanded the unit tests.
+
+ o On Mac, you cannot set colors directly using createCellStyle.  You
+ can still do it manually, please see the javadocs.
+
+Changes in version 0.1.2  (released 2010-01-02)
+
+ o Fixed getRows, getCells so it does not error out for empty
+ rows/cells.  Modified read.xlsx too. 
+
+ o Added append argument to write.xlsx to be able to export to
+ multiple worksheets of a file.  (Suggestion by rlearnr@gmail.com.)
