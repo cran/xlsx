@@ -29,29 +29,6 @@
 
 ##################################################################
 #
-.setEnv <- function(computer=c("HOME", "LAPTOP", "WORK"))
-{
-  if (computer=="WORK"){
-    pkgdir  <<- "H:/user/R/Adrian/findataweb/temp/xlsx/trunk/"
-    outdir  <<- "H:/"
-    Rcmd    <<- "S:/All/Risk/Software/R/R-2.10.1/bin/Rcmd"
-    javadir <<- "C:/Documents and Settings/e47187/workspace/xlsx/"
-  } else if (computer == "LAPTOP"){
-    pkgdir    <<- "C:/Users/adrian/R/findataweb/temp/xlsx/trunk/"
-    outdir    <<- "C:/"
-    Rcmd      <<- '"C:/Program Files/R/R-2.10.1/bin/Rcmd"'
-    javadir   <<- "C:/Users/home/workspace/xlsx/"
-    rforgedir <<- "C:/Users/adrian/R/R-Forge/xlsx/"
-  } else if (computer == "HOME"){
-  } else {
-  }
-
-  invisible()
-}
-
-
-##################################################################
-#
 .update.DESCRIPTION <- function(packagedir, version)
 {
   file <- paste(packagedir, "DESCRIPTION", sep="") 
@@ -99,12 +76,34 @@
 }
 
 ##################################################################
+#
+.setEnv <- function(computer=c("HOME", "LAPTOP", "WORK"))
+{
+  if (computer=="WORK"){
+    pkgdir  <<- "H:/user/R/Adrian/findataweb/temp/xlsx/trunk/"
+    outdir  <<- "H:/"
+    Rcmd    <<- "S:/All/Risk/Software/R/R-2.10.1/bin/Rcmd"
+    javadir <<- "C:/Documents and Settings/e47187/workspace/xlsx/"
+  } else if (computer == "LAPTOP"){
+    pkgdir    <<- "C:/Users/adrian/R/findataweb/temp/xlsx/trunk/"
+    outdir    <<- "C:/"
+    Rcmd      <<- '"C:/Program Files/R/R-2.11.0/bin/Rcmd"'
+    javadir   <<- "C:/Users/home/workspace/xlsx/"
+    rforgedir <<- "C:/Users/adrian/R/R-Forge/xlsx/"
+  } else if (computer == "HOME"){
+  } else {
+  }
+
+  invisible()
+}
+
+##################################################################
 ##################################################################
 
 version <- NULL        # keep increasing the minor
-version <- "0.1.3"     # if you want to set it by hand
+version <- "0.2.0"     # if you want to set it by hand
 
-.setEnv("WORK")   # "LAPTOP"
+.setEnv("LAPTOP")   # "WORK" "LAPTOP"
 
 #.move.java.classes(TRUE)  # move java classes
 

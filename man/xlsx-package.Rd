@@ -31,14 +31,12 @@
   The approach taken there is to directly process the underlying
   \code{XML} files.  You should check it out as that approach may be
   superior in certain cases.  For example, the package \code{xlsx} has a
-  bigger memory footprint at start-up.
+  bigger memory footprint and struggles to read/write large xlsx files.
   
   A collection of tests that can be used as examples are located 
   in folder \code{/tests/}.
 
-  Patches with bug fixes and improvements are welcome.  The development
-  version of this package is hosted on R-Forge at
-  \url{http://r-forge.r-project.org/projects/xlsx/}.
+  Patches with bug fixes and improvements are welcome.
   
   NOTE: You may need to add to your PATH variable the location
   of your JVM (e.g. C:/Program Files/Java/jre6/bin/client) to get
@@ -49,8 +47,8 @@
 \tabular{ll}{
 Package: \tab xlsx\cr
 Type: \tab Package\cr
-Version: \tab 0.1.3\cr
-Date: \tab 2010-03-15\cr
+Version: \tab 0.2.0\cr
+Date: \tab 2010-05-01\cr
 License: \tab GPL-3\cr
 }
 

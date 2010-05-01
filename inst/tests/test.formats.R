@@ -4,7 +4,6 @@
 
 test.formats <- function(outdir="C:/Temp/")
 {  
-  require(xlsx)
   cat("##################################################\n")
   cat("Testing COLORS, FILLS, BORDERS ...\n")
   cat("##################################################\n")

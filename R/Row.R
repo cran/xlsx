@@ -8,9 +8,9 @@ createRow <- function(sheet, rowIndex=1:5)
 {
   rows <- vector("list", length(rowIndex))
   names(rows) <- rowIndex
-  for (ir in rowIndex)
+  for (ir in seq_along(rowIndex))
     rows[[ir]] <- .jcall(sheet, "Lorg/apache/poi/ss/usermodel/Row;",
-      "createRow", as.integer(ir-1)) # in java the index starts from 0!
+      "createRow", as.integer(rowIndex[ir]-1)) # in java the index starts from 0!
   
   rows
 }
@@ -48,7 +48,18 @@ getRows <- function(sheet, rowIndex=NULL)
 }
 
 
+######################################################################
+# remove rows
+#
+removeRow <- function(sheet, rows=NULL)
+{
+  if (is.null(rows))
+    rows <- getRows(sheet)   # delete them all
 
+  lapply(rows, function(x){.jcall(sheet, "V", "removeRow", x)})
+
+  invisible()
+}
 
 
 

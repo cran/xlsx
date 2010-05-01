@@ -4,7 +4,6 @@
 
 test.import <- function(outdir="C:/Temp/")
 {
-  require(xlsx)
   cat("##################################################\n")
   cat("Test reading xlsx files into R\n")
   cat("##################################################\n")
@@ -65,7 +64,11 @@ test.import <- function(outdir="C:/Temp/")
   print(res)   # force convesion to numeric
   cat("OK\n")    
 
+  cat("Test you can import sheet one column... \n")
+  res <- read.xlsx(file, "oneColumn", keepFormulas=TRUE)
+  if (ncol(res)==1) {cat("OK\n")} else {cat("FAILED!\n")}
 
+  
   cat("######################################################\n")
   cat("Test low level import ...\n")
   cat("######################################################\n")  

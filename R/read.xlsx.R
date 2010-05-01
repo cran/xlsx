@@ -36,7 +36,7 @@ read.xlsx <- function(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
     
     if (header){  # first row of cells that you want
       colnames(VV) <- VV[1,]
-      VV <- VV[-1,]
+      VV <- VV[-1,,drop=FALSE]
     }
     
     res <- vector("list", length=cols)

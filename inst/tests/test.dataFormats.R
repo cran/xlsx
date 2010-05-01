@@ -7,6 +7,10 @@ test.dataFormats <- function()
   require(xlsx)
   Sys.setenv(tz="")
 
+  cat("####################################################\n")
+  cat("Test dataFormats ... \n")
+  cat("####################################################\n")      
+
   # create a test data.frame
   data <- data.frame(mon=month.abb[1:10], day=1:10, year=2000:2009,
     date=seq(as.Date("2009-01-01"), by="1 month", length.out=10),
@@ -45,6 +49,7 @@ test.dataFormats <- function()
 
   file <- "C:/Temp/test_dataFormats.xlsx"
   saveWorkbook(wb, file)
+  cat("Wrote file ", file, "\n\n")
 
 }
 

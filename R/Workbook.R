@@ -44,7 +44,11 @@ saveWorkbook <- function(wb, file)
 getSheets <- function(wb)
 {
   noSheets <- wb$getNumberOfSheets()
-
+  if (noSheets==0){
+    cat("Workbook has no sheets!\n")
+    return()
+  }
+  
   res <- vector("list", length=noSheets)
   for (sh in 1:noSheets){
     names(res)[sh] <- wb$getSheetName(as.integer(sh-1))

@@ -1,4 +1,4 @@
-#
+# Some examples of low level 
 #
 #
 
@@ -43,8 +43,9 @@ test.lowlevel <- function()
   .jcall(row, "Lorg/apache/poi/ss/usermodel/Cell;",
     "createCell", as.integer(3))$setCellValue(TRUE)
 
-  file <- "C:/Users/adrian/R/findataweb/temp/xlsx/tests/test_export.xlsx"
+  file <- "C:/Users/adrian/R/findataweb/temp/xlsx/tests/test_lowlevel.xlsx"
   saveWorkbook(wb, file)
+  cat("Wrote file:", file, "\n\n")
 }
 
 ## # make a file handle and write the xlsx to file

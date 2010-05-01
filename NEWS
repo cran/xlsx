@@ -1,5 +1,25 @@
 NEWS for package xlsx
 
+Changes in version 0.2.0 (released 2010-05-01)
+
+ o Switched to POI 3.6.  This resulted in significant memory
+ improvements but will still run into memory issues when
+ reading/writing large xlsx files.  
+ 
+ o Added addPicture function for embedding pictures into xlsx files. 
+
+ o Added removeRow function for conveniently removing existing rows
+ from the spreadsheet.
+
+ o Added/Fixed comments for cells.  See ?Comment 
+
+ o Fixed bug in read.xlsx for the case when the file contains only
+ one column (issue reported by Hans Petersen), a corner case when
+ drop=TRUE wrecked havoc. 
+
+ o Fixed bug in createRow.  If rowIndex did not start at 1, it
+ created spurious NULL entries.  
+
 Changes in version 0.1.3  (released 2010-03-15)
 
  o Added indCol argument to getCells in case you want to get only a

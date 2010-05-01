@@ -70,7 +70,7 @@ getMatrixValues(sheet, rowIndex, colIndex)
 
 \author{Adrian Dragulescu}
 \seealso{To format cells, see \code{\link{CellStyle}}.  For rows see
-  \code{\link{Rows}}, for sheets see \code{\link{Sheet}}.}
+  \code{\link{Row}}, for sheets see \code{\link{Sheet}}.}
 \examples{
 
 file <- system.file("tests", "test_import.xlsx", package = "xlsx")

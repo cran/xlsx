@@ -25,6 +25,8 @@ getSheets(wb)
 }
 
 \value{
+  \code{createSheet} returns the created \code{Sheet} object.
+  
   \code{getSheets} returns a list of java object references each
   pointing to an worksheet.  The list is named with the sheet names. 
 }
