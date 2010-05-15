@@ -6,7 +6,7 @@ Read the contents of a worksheet into an R \code{data.frame}.
 }
 \usage{
 read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
-  as.data.frame=TRUE, header=TRUE, colClasses=NA, keepFormulas=FALSE)
+  as.data.frame=TRUE, header=TRUE, colClasses=NA, keepFormulas=FALSE, ...)
 }
 \arguments{ 
   \item{file}{the \emph{absolute} path to the file which the data are to
@@ -29,6 +29,8 @@ read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
   \item{keepFormulas}{a logical value indicating if Excel formulas
     should be shown as text in \R and not evaluated before bringing them
     in.}
+  \item{\ldots}{other arguments to \code{data.frame}, for example
+    \code{stringsAsFactors}.}
 }
 
 \details{

@@ -2,7 +2,7 @@
 #
 #
 read.xlsx <- function(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
-  as.data.frame=TRUE, header=TRUE, colClasses=NA, keepFormulas=FALSE)
+  as.data.frame=TRUE, header=TRUE, colClasses=NA, keepFormulas=FALSE, ...)
 {
   if (is.null(sheetName) & missing(sheetIndex))
     stop("Please provide a sheet name OR a sheet index.")
@@ -66,7 +66,7 @@ read.xlsx <- function(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
       res[[ic]] <- aux
     }
 
-    res <- data.frame(res)
+    res <- data.frame(res, ...)
   }
 
   res

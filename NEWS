@@ -1,5 +1,15 @@
 NEWS for package xlsx
 
+Changes in version 0.2.1 (released 2010-05-15)
+
+ o Fixed bug with write.xlsx.  It does not write colnames even if
+ col.names=TRUE.  Reported by Ralf Tautenhahn.
+
+ o Added an ... arg to read.xlsx that is passed to the data.frame
+ constructor, for example to control the stringsAsFactors option. 
+ 
+
+
 Changes in version 0.2.0 (released 2010-05-01)
 
  o Switched to POI 3.6.  This resulted in significant memory

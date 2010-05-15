@@ -17,6 +17,12 @@ test.export <- function(outdir="C:/Temp/")
   write.xlsx(x, file)
   cat("Wrote file ", file, "\n\n")
 
+## Used not to write col.names!  
+##   test.df <- data.frame(mycol1=1:10, mycol2=as.character(1:10))
+##   write.xlsx(test.df, file=paste(outdir, 'test.df.xlsx', sep=""),
+##     col.names=TRUE, row.names=FALSE)
+  
+  
   cat("Test the append argument by adding another sheet \n")
   file <- paste(outdir, "test_export.xlsx", sep="")
   write.xlsx(USArrests, file, sheetName="usarrests", append=TRUE)

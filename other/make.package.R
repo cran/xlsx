@@ -2,30 +2,30 @@
 #
 #
 
-##################################################################
-# Copy one folder to another without the .svn dirs
-#  fromDir <- "C:/Users/adrian/R/findataweb/temp/xlsx/trunk"
-#  toDir <- "C:/Temporary/Downloads/xlsx"
-#  .deepCopy(fromDir, toDir)
-#
-.deepCopy <- function(fromDir, toDir)
-{
-  if (file.info(fromDir)$isdir){
-    fromFiles <- list.files(fromDir, full.names=TRUE)
+## ##################################################################
+## # Copy one folder to another without the .svn dirs
+## #  fromDir <- "C:/Users/adrian/R/findataweb/temp/xlsx/trunk"
+## #  toDir <- "C:/Temporary/Downloads/xlsx"
+## #  .deepCopy(fromDir, toDir)
+## #
+## .deepCopy <- function(fromDir, toDir)
+## {
+##   if (file.info(fromDir)$isdir){
+##     fromFiles <- list.files(fromDir, full.names=TRUE)
     
-    for (f in fromFiles){
-      if (file.info(f)$isdir){
-        toDir2 <- paste(toDir, basename(f), sep="/")
-        dir.create(toDir2)
-        .deepCopy(f, toDir2)      
-      } else {
-        file.copy(f, toDir)
-      }
-    }
-  } else {
-    file.copy(fromDir, toDir)
-  }
-}  
+##     for (f in fromFiles){
+##       if (file.info(f)$isdir){
+##         toDir2 <- paste(toDir, basename(f), sep="/")
+##         dir.create(toDir2)
+##         .deepCopy(f, toDir2)      
+##       } else {
+##         file.copy(f, toDir)
+##       }
+##     }
+##   } else {
+##     file.copy(fromDir, toDir)
+##   }
+## }  
 
 ##################################################################
 #
@@ -100,15 +100,15 @@
 ##################################################################
 ##################################################################
 
-version <- NULL        # keep increasing the minor
-version <- "0.2.0"     # if you want to set it by hand
+#version <- NULL        # keep increasing the minor
+version <- "0.2.1"     # if you want to set it by hand
 
 .setEnv("LAPTOP")   # "WORK" "LAPTOP"
 
 #.move.java.classes(TRUE)  # move java classes
 
 # change the version
-version <- .update.DESCRIPTION(pkgdir, version)
+#version <- .update.DESCRIPTION(pkgdir, version)
 
 # make the package
 setwd(outdir)

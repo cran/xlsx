@@ -57,7 +57,7 @@ write.xlsx <- function(x, file, sheetName="Sheet 1", formatTemplate=NULL,
     x <- cbind(rownames=rownames(x), x)
   
   colIndex <- 1:ncol(x)
-  rowIndex <- 1:nrow(x) + jOffset
+  rowIndex <- 1:nrow(x) + iOffset
   
   .write_block(wb, sheet, x, rowIndex, colIndex)
   saveWorkbook(wb, file)
@@ -72,8 +72,9 @@ write.xlsx <- function(x, file, sheetName="Sheet 1", formatTemplate=NULL,
   
   invisible()
 }
-#  .jcall("java/lang/System", "V", "gc")  # doesn't do anything!
 
+
+#  .jcall("java/lang/System", "V", "gc")  # doesn't do anything!
 
 ##  don't do it with blocks, it's silly
 ##   noBlocks <- trunc(nrow(x)/.BLOCK_SIZE)+1
