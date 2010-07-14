@@ -26,13 +26,16 @@
   for (ic in indDT){
     lapply(cells[1:nrow(cells),colIndex[ic]], setCellStyle, datetimeFormat)
   }
-  
+
 }
 
 
 write.xlsx <- function(x, file, sheetName="Sheet 1", formatTemplate=NULL,
   col.names=TRUE, row.names=TRUE, append=FALSE)
 {
+  if (!is.data.frame(x))
+    x <- data.frame(x)    # just because the error message is too ugly
+    
   iOffset <- jOffset <- 0
   if (col.names)
     iOffset <- 1

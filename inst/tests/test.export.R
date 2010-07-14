@@ -35,6 +35,19 @@ test.export <- function(outdir="C:/Temp/")
   (time <- system.time(write.xlsx(x, file)))
   cat("Wrote file ", file, "\n\n")
 
+
+  cat("Test writing/reading data.frames with NA values ... \n") 
+  file <- paste(outdir, "test_writeread_NA.xlsx", sep="")
+  x <- data.frame(matrix(c(1.0, 2.0, 3.0, NA), 2, 2))
+  write.xlsx(x, file, row.names=FALSE)
+  xx <- read.xlsx(file, 1)
+  if (identical(x,xx)){
+    cat("OK \n\n")
+  } else {
+    cat("FAILED! \n\n")
+  }
+  
+  
 ##   cat("Test memory ...\n")
 ##   file <- paste(outdir, "test_exportMemory.xlsx", sep="")
 ##   x <- expand.grid(ind=1:1000, letters=letters, months=month.abb)

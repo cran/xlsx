@@ -37,6 +37,8 @@ an issue.  Please report if you experience slow performance.  Dates and
 POSIXct classes are formatted separately after the insertion.  This also
 adds to processing time.
 
+If \code{x} is not a \code{data.frame} it will be converted to one. 
+
 }
 \author{ Adrian Dragulescu }
 \seealso{\code{\link{read.xlsx}} for reading \code{xlsx} documents.

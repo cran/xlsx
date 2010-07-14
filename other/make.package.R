@@ -2,30 +2,6 @@
 #
 #
 
-## ##################################################################
-## # Copy one folder to another without the .svn dirs
-## #  fromDir <- "C:/Users/adrian/R/findataweb/temp/xlsx/trunk"
-## #  toDir <- "C:/Temporary/Downloads/xlsx"
-## #  .deepCopy(fromDir, toDir)
-## #
-## .deepCopy <- function(fromDir, toDir)
-## {
-##   if (file.info(fromDir)$isdir){
-##     fromFiles <- list.files(fromDir, full.names=TRUE)
-    
-##     for (f in fromFiles){
-##       if (file.info(f)$isdir){
-##         toDir2 <- paste(toDir, basename(f), sep="/")
-##         dir.create(toDir2)
-##         .deepCopy(f, toDir2)      
-##       } else {
-##         file.copy(f, toDir)
-##       }
-##     }
-##   } else {
-##     file.copy(fromDir, toDir)
-##   }
-## }  
 
 ##################################################################
 #
@@ -82,7 +58,7 @@
   if (computer=="WORK"){
     pkgdir  <<- "H:/user/R/Adrian/findataweb/temp/xlsx/trunk/"
     outdir  <<- "H:/"
-    Rcmd    <<- "S:/All/Risk/Software/R/R-2.10.1/bin/Rcmd"
+    Rcmd    <<- "S:/All/Risk/Software/R/R-2.11.1/bin/Rcmd"
     javadir <<- "C:/Documents and Settings/e47187/workspace/xlsx/"
   } else if (computer == "LAPTOP"){
     pkgdir    <<- "C:/Users/adrian/R/findataweb/temp/xlsx/trunk/"
@@ -101,9 +77,9 @@
 ##################################################################
 
 #version <- NULL        # keep increasing the minor
-version <- "0.2.1"     # if you want to set it by hand
+version <- "0.2.2"     # if you want to set it by hand
 
-.setEnv("LAPTOP")   # "WORK" "LAPTOP"
+.setEnv("WORK")   # "WORK" "LAPTOP"
 
 #.move.java.classes(TRUE)  # move java classes
 
@@ -134,5 +110,33 @@ cmd <- paste(Rcmd, "check", pkgdir)
 print(cmd); system(cmd)
 
 
+
+
 ## .deepCopy("C:/Users/adrian/R/findataweb/temp/xlsx/trunk/",
 ##    "C:/Users/adrian/R/findataweb/temp/xlsx/tags/0.1.3/")
+
+
+## ##################################################################
+## # Copy one folder to another without the .svn dirs
+## #  fromDir <- "C:/Users/adrian/R/findataweb/temp/xlsx/trunk"
+## #  toDir <- "C:/Temporary/Downloads/xlsx"
+## #  .deepCopy(fromDir, toDir)
+## #
+## .deepCopy <- function(fromDir, toDir)
+## {
+##   if (file.info(fromDir)$isdir){
+##     fromFiles <- list.files(fromDir, full.names=TRUE)
+    
+##     for (f in fromFiles){
+##       if (file.info(f)$isdir){
+##         toDir2 <- paste(toDir, basename(f), sep="/")
+##         dir.create(toDir2)
+##         .deepCopy(f, toDir2)      
+##       } else {
+##         file.copy(f, toDir)
+##       }
+##     }
+##   } else {
+##     file.copy(fromDir, toDir)
+##   }
+## }  

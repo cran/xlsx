@@ -94,14 +94,16 @@ getCellStyle(cell)
   that formats a specific cell and then checking out the resulting VBA
   code.  From there you can read the \code{dataFormat} code.
   
-  NOTE: You need to have a \code{Workbook} object to attach  a
+  You need to have a \code{Workbook} object to attach  a
   \code{CellStyle} object to it.
 
-  NOTE: Since OS X 10.5 Apple dropped support for AWT on the main thread,  
+  Since OS X 10.5 Apple dropped support for AWT on the main thread,  
   so essentially you cannot use any graphics classes in R on OS X 10.5  
   since R is single-threaded. (verbatim from Simon Urbanek).  This
   implies that setting colors on Mac will not work as is!  A set of
   about 50 basic colors are still available please see the javadocs. 
+
+  Unspecified values for arguments are taken from the system locale.  
   
 }
 \author{Adrian Dragulescu}

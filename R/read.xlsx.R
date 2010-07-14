@@ -2,7 +2,8 @@
 #
 #
 read.xlsx <- function(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
-  as.data.frame=TRUE, header=TRUE, colClasses=NA, keepFormulas=FALSE, ...)
+  colIndex=NULL, as.data.frame=TRUE, header=TRUE, colClasses=NA,
+  keepFormulas=FALSE, ...)
 {
   if (is.null(sheetName) & missing(sheetIndex))
     stop("Please provide a sheet name OR a sheet index.")
@@ -17,11 +18,12 @@ read.xlsx <- function(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
   }
 
   rows  <- getRows(sheet, rowIndex)  
-  cells <- getCells(rows)
+  cells <- getCells(rows, colIndex)
   res <- lapply(cells, getCellValue, keepFormulas=keepFormulas)
   
   if (as.data.frame){
-    ind <- lapply(strsplit(names(res), "\\."), as.numeric)
+    # need to use the index from the names because of empty cells
+    ind <- lapply(strsplit(names(res), "\\."), as.numeric) 
     namesIndM <- do.call(rbind, ind)
     
     row.names <- sort(as.numeric(unique(namesIndM[,1])))

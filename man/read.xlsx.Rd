@@ -6,7 +6,8 @@ Read the contents of a worksheet into an R \code{data.frame}.
 }
 \usage{
 read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
-  as.data.frame=TRUE, header=TRUE, colClasses=NA, keepFormulas=FALSE, ...)
+  colIndex=NULL, as.data.frame=TRUE, header=TRUE, colClasses=NA,
+  keepFormulas=FALSE, ...)
 }
 \arguments{ 
   \item{file}{the \emph{absolute} path to the file which the data are to
@@ -14,7 +15,9 @@ read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
   \item{sheetIndex}{a number representing the sheet index in the workbook.}
   \item{sheetName}{a character string with the sheet name.}
   \item{rowIndex}{a numeric vector indicating the rows you want to
-    extract.  If \code{NULL}, all the rows found will be extracted.}
+    extract.  If \code{NULL}, all rows found will be extracted.}
+  \item{colIndex}{a numeric vector indicating the cols you want to
+    extract.  If \code{NULL}, all columns found will be extracted.}  
   \item{as.data.frame}{a logical value indicating if the result should
     be coerced into a \code{data.frame}.  If \code{FALSE}, the result is
     a list with one element for each non empty cell.  The name for each

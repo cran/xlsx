@@ -64,13 +64,15 @@ getCells <- function(row, colIndex=NULL, simplify=TRUE)
 #
 setCellValue <- function(cell, value, richTextString=FALSE)
 {
+  if (is.na(value)){
+    return(invisible(.jcall(cell, "V", "setCellErrorValue", .jbyte(42))))
+  }
   value <- switch(class(value)[1],
     integer = as.numeric(value),
     numeric = value,              
     Date    = as.numeric(value) + 25569,             # add Excel origin
     POSIXct = as.numeric(value)/86400 + 25569,               
     as.character(value))  # for factors and other types
-#browser()
 
   if (richTextString)
     value <- .jnew("org/apache/poi/xssf/usermodel/XSSFRichTextString",
@@ -96,7 +98,7 @@ getCellValue <- function(cell, keepFormulas=FALSE)
                finally=NA)),   # formula
     NA,                                              # blank cell
     .jcall(cell, "Z", "getBooleanCellValue"),        # boolean
-    .jcall(cell, "B", "getErrorCellValue"),          # error
+    NA, #ifelse(keepErrors, .jcall(cell, "B", "getErrorCellValue"), NA), # error
     "Error"                                          # catch all
   ) 
 

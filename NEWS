@@ -1,5 +1,19 @@
 NEWS for package xlsx
 
+
+Changes in version 0.2.2 (released 2010-07-14)
+
+ o Added a colIndex argument to read.xlsx to facilitate reading only
+ specific columns. 
+
+ o setCellValue now tests for NA, and if value is NA, it will fill the
+ cell with #N/A. 
+
+ o Fixed bug in getCellValue.  It now returns NA for all the error
+ codes in the cell.  It used to return a numeric code which was
+ confusing to the R user.  Reported by Ralf Tautenhahn. 
+ 
+
 Changes in version 0.2.1 (released 2010-05-15)
 
  o Fixed bug with write.xlsx.  It does not write colnames even if
@@ -8,7 +22,6 @@ Changes in version 0.2.1 (released 2010-05-15)
  o Added an ... arg to read.xlsx that is passed to the data.frame
  constructor, for example to control the stringsAsFactors option. 
  
-
 
 Changes in version 0.2.0 (released 2010-05-01)
 
@@ -29,6 +42,7 @@ Changes in version 0.2.0 (released 2010-05-01)
 
  o Fixed bug in createRow.  If rowIndex did not start at 1, it
  created spurious NULL entries.  
+
 
 Changes in version 0.1.3  (released 2010-03-15)
 
