@@ -77,7 +77,7 @@
 ##################################################################
 
 #version <- NULL        # keep increasing the minor
-version <- "0.2.2"     # if you want to set it by hand
+version <- "0.2.3"     # if you want to set it by hand
 
 .setEnv("WORK")   # "WORK" "LAPTOP"
 

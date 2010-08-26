@@ -9,7 +9,7 @@ test.import <- function(outdir="C:/Temp/")
   cat("##################################################\n")
   
   file <- paste(.Library, "/xlsx/tests/test_import.xlsx", sep="")
-
+  
   cat("Load test_import.xlsx ... ")
   wb <- loadWorkbook(file)
   cat("OK\n")
@@ -68,6 +68,10 @@ test.import <- function(outdir="C:/Temp/")
   res <- read.xlsx(file, "oneColumn", keepFormulas=TRUE)
   if (ncol(res)==1) {cat("OK\n")} else {cat("FAILED!\n")}
 
+  cat("Check that you can import String formulas ... \n")
+  res <- read.xlsx(file, "formulas", keepFormulas=FALSE)
+  if (res[1,3]=="2010-1") {cat("OK\n")} else {cat("FAILED!\n")}
+ 
   
   cat("######################################################\n")
   cat("Test low level import ...\n")
@@ -100,7 +104,6 @@ test.import <- function(outdir="C:/Temp/")
   print(vv)
   cat("OK\n")    
       
-
   
 }
 

@@ -1,5 +1,16 @@
 NEWS for package xlsx
 
+Changes in version 0.2.3 (released 2010-08-26)
+
+ o Fix the hAlign and vAlign arguments in createCellStyle.  The
+ internal method call was lacking a cast to jshort.  Reported by
+ Douglas Rivers. 
+
+ o Fix getCellValue when you have formulas with String values (it
+ assumed Numeric values and errored out for other types).  Support now
+ Strings and Booleans.  Error out for other cell types.  Don't know a
+ sound solution.  Reported by ravi(?) rv15i@yahoo.se.
+
 
 Changes in version 0.2.2 (released 2010-07-14)
 

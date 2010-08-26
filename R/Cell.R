@@ -84,6 +84,8 @@ setCellValue <- function(cell, value, richTextString=FALSE)
 
 ######################################################################
 # get cell value. ONE cell only
+# Not happy with the case when you have formulas.  Still not general
+#   enough.  We'll see how many things still not work.
 #
 getCellValue <- function(cell, keepFormulas=FALSE)
 {
@@ -93,9 +95,17 @@ getCellValue <- function(cell, keepFormulas=FALSE)
     .jcall(.jcall(cell,
       "Lorg/apache/poi/xssf/usermodel/XSSFRichTextString;",
       "getRichStringCellValue"), "S", "toString"),   # string
-    ifelse(keepFormulas, .jcall(cell, "S", "getCellFormula"),
-      tryCatch(.jcall(cell, "D", "getNumericCellValue"), error=function(e) e,
-               finally=NA)),   # formula
+    ifelse(keepFormulas, .jcall(cell, "S", "getCellFormula"),   # formula
+      tryCatch(.jcall(cell, "D", "getNumericCellValue"),
+        error=function(e){
+          tryCatch(.jcall(cell, "S", "getStringCellValue"),
+            error=function(e){
+              tryCatch(.jcall(cell, "Z", "getBooleanCellValue"),
+                error=function(e)e,
+                finally=NA)
+            }, finally=NA)
+        }, finally=NA)
+    ),  
     NA,                                              # blank cell
     .jcall(cell, "Z", "getBooleanCellValue"),        # boolean
     NA, #ifelse(keepErrors, .jcall(cell, "B", "getErrorCellValue"), NA), # error

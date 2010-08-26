@@ -9,11 +9,11 @@ createCellStyle <- function(wb, hAlign=NULL, vAlign=NULL, borderPosition=NULL,
     "createCellStyle") 
 
   if (!is.null(hAlign))
-    .jcall(cellStyle, "V", "setAlignment", xlsx:::.CELL_STYLES[hAlign])
-
+      .jcall(cellStyle, "V", "setAlignment", .jshort(xlsx:::.CELL_STYLES[hAlign]))
+  
   if (!is.null(vAlign))
-    .jcall(cellStyle, "V", "setVerticalAlignment", xlsx:::.CELL_STYLES[vAlign])
-#browser()
+    .jcall(cellStyle, "V", "setVerticalAlignment", .jshort(xlsx:::.CELL_STYLES[vAlign]))
+
   if (!is.null(borderPosition)){
     switch(borderPosition,
       BOTTOM = .jcall(cellStyle, "V", "setBorderBottom",

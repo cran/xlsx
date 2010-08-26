@@ -54,12 +54,17 @@ test.formats <- function(outdir="C:/Temp/")
   setCellStyle(cell.3, cellStyle3)   # does not set the background?!
   cat("OK\n")
 
+
+  cat("check ALIGN_CENTER not working??")
+  cell.4 <- createCell(rows[7], col=1)[[1,1]]      
+  cellStyle4 <- createCellStyle(wb, hAlign="ALIGN_CENTER")
+  setCellStyle(cell.4, cellStyle4)
+  cat("OK\n")
   
   cat("Autosize first column ... ") 
   autoSizeColumn(sheet, 1)  # test autosizing
   cat("OK\n")
 
-  
   file <- paste(outdir, "test_export_colors.xlsx", sep="")
   saveWorkbook(wb, file)
   cat("Wrote file ", file, "\n\n")
