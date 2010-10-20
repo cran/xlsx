@@ -1,5 +1,12 @@
 NEWS for package xlsx
 
+Changes in version 0.2.4 (released 2010-10-20)
+
+ o New function write.xlsx2 in which the writing is done on the java
+ side.  Speed improvements of one order of magnitude over write.xls on
+ moderately large data.frames (100,000 elements).  
+
+
 Changes in version 0.2.3 (released 2010-08-26)
 
  o Fix the hAlign and vAlign arguments in createCellStyle.  The

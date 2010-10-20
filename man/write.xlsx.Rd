@@ -1,11 +1,15 @@
 \name{write.xlsx}
 \alias{write.xlsx}
+\alias{write.xlsx2}
 \title{Write a data.frame to an Excel 2007 workbook.}
 \description{
 Write a \code{data.frame} to an Excel 2007 workbook.
 }
 \usage{
 write.xlsx(x, file, sheetName="Sheet 1", formatTemplate=NULL,
+  col.names=TRUE, row.names=TRUE, append=FALSE)
+
+write.xlsx2(x, file, sheetName="Sheet 1", formatTemplate=NULL,
   col.names=TRUE, row.names=TRUE, append=FALSE)
 }
 \arguments{
@@ -37,7 +41,13 @@ an issue.  Please report if you experience slow performance.  Dates and
 POSIXct classes are formatted separately after the insertion.  This also
 adds to processing time.
 
-If \code{x} is not a \code{data.frame} it will be converted to one. 
+If \code{x} is not a \code{data.frame} it will be converted to one.
+
+NEW (in version 0.2.4) function \code{write.xlsx2} uses java internally
+for looping and the result is a significant improvement in performance.
+Please see the source file for an example of how to implent a custom
+write function.  Only integer, numeric and character columns are
+supported.  Other column types are converted to character.  
 
 }
 \author{ Adrian Dragulescu }

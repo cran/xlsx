@@ -44,9 +44,9 @@
 
    # move the source files to have for reference ... 
    file.copy("src/dev/RInterface.java", paste(pkgdir, 
-     "src/RInterface.java", sep=""), overwrite=TRUE)
+     "other/RInterface.java", sep=""), overwrite=TRUE)
    file.copy("src/tests/TestRInterface.java", paste(pkgdir, 
-     "src/TestRInterface.java", sep=""), overwrite=TRUE)
+     "other/TestRInterface.java", sep=""), overwrite=TRUE)
   }
   invisible()
 }
@@ -77,11 +77,11 @@
 ##################################################################
 
 #version <- NULL        # keep increasing the minor
-version <- "0.2.3"     # if you want to set it by hand
+version <- "0.2.4"     # if you want to set it by hand
 
 .setEnv("WORK")   # "WORK" "LAPTOP"
 
-#.move.java.classes(TRUE)  # move java classes
+.move.java.classes(TRUE)  # move java classes
 
 # change the version
 #version <- .update.DESCRIPTION(pkgdir, version)

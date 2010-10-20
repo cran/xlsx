@@ -29,13 +29,6 @@ test.export <- function(outdir="C:/Temp/")
   cat("Wrote file ", file, "\n\n")
 
 
-  cat("Test speed ...\n")
-  file <- paste(outdir, "test_exportSpeed.xlsx", sep="")
-  x <- expand.grid(ind=1:10, letters=letters, months=month.abb)
-  (time <- system.time(write.xlsx(x, file)))
-  cat("Wrote file ", file, "\n\n")
-
-
   cat("Test writing/reading data.frames with NA values ... \n") 
   file <- paste(outdir, "test_writeread_NA.xlsx", sep="")
   x <- data.frame(matrix(c(1.0, 2.0, 3.0, NA), 2, 2))
@@ -46,25 +39,18 @@ test.export <- function(outdir="C:/Temp/")
   } else {
     cat("FAILED! \n\n")
   }
-  
-  
-##   cat("Test memory ...\n")
-##   file <- paste(outdir, "test_exportMemory.xlsx", sep="")
-##   x <- expand.grid(ind=1:1000, letters=letters, months=month.abb)
-##   cat("Writing object size: ", object.size(x), " uses all Java heap space\n")
-##   (time <- system.time(write.xlsx2(x, file)))
-##   cat("Wrote file ", file, "\n\n")
 
+  
+  cat("Test speed ...\n")
+  file <- paste(outdir, "test_exportSpeed.xlsx", sep="")
+  x <- expand.grid(ind=1:30, letters=letters, months=month.abb)
+  x <- cbind(x, val=runif(nrow(x)))
+  print(system.time(write.xlsx(x, file)))   # 206 seconds
+  print(system.time(write.xlsx2(x, file)))  # 31 seconds
+  cat("Wrote file ", file, "\n\n")
+  
 }
 
-
-
-##   cat("Write a big data.frame by column")
-##   file <- paste(outdir, "test_exportMemory.xlsx", sep="")
-##   x <- expand.grid(ind=1:1000, letters=letters, months=month.abb)
-##   wb <- createWorkbook()
-##   sheet <- createSheet(wb, "Sheet1")
-##   saveWorkbook(wb, file)
 
 ##   for (ic in 1:ncol(x)){
 ##     wb <- loadWorkbook(file)
@@ -77,7 +63,18 @@ test.export <- function(outdir="C:/Temp/")
 ##   }
 
 
+  ## cat("Test speed ...\n")
+  ## file <- paste(outdir, "test_exportSpeed.xlsx", sep="")
+  ## x <- expand.grid(ind=1:10, letters=letters, months=month.abb)
+  ## (time <- system.time(write.xlsx(x, file)))
+  ## cat("Wrote file ", file, "\n\n")
 
+##   cat("Test memory ...\n")
+##   file <- paste(outdir, "test_exportMemory.xlsx", sep="")
+##   x <- expand.grid(ind=1:1000, letters=letters, months=month.abb)
+##   cat("Writing object size: ", object.size(x), " uses all Java heap space\n")
+##   (time <- system.time(write.xlsx2(x, file)))
+##   cat("Wrote file ", file, "\n\n")
 
 
 
