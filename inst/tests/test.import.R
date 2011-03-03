@@ -2,13 +2,14 @@
 #
 #
 
-test.import <- function(outdir="C:/Temp/")
+test.import <- function(outdir="C:/Temp/", type="xlsx",
+                        speedtest=FALSE)
 {
   cat("##################################################\n")
   cat("Test reading xlsx files into R\n")
   cat("##################################################\n")
-  
-  file <- paste(.Library, "/xlsx/tests/test_import.xlsx", sep="")
+  filename <- paste("test_import.", type, sep="")
+  file <- system.file("tests", filename, package="xlsx")
   
   cat("Load test_import.xlsx ... ")
   wb <- loadWorkbook(file)
@@ -43,7 +44,7 @@ test.import <- function(outdir="C:/Temp/")
   stopifnot(class(res[,4])=="logical")
   cat("OK\n")    
   cat("Sixth column is of class POSIXct ... ")
-  stopifnot(class(res[,6])[2]=="POSIXct")
+  stopifnot(inherits(res[,6], "POSIXct"))
   cat("OK\n\n")    
   options(stringsAsFactors=orig)
   
@@ -71,12 +72,28 @@ test.import <- function(outdir="C:/Temp/")
   cat("Check that you can import String formulas ... \n")
   res <- read.xlsx(file, "formulas", keepFormulas=FALSE)
   if (res[1,3]=="2010-1") {cat("OK\n")} else {cat("FAILED!\n")}
- 
+
+  if (speedtest){
+    require(xlsx)
+    colClasses <- c("numeric", rep("character", 76))
+    res <- read.xlsx2("C:/Temp/ModelList.xlsx", sheetName="Models",
+                      colClasses=colClasses)
+    
+  }
+  
+  cat("######################################################\n")
+  cat("Test read.xlsx2  ...\n")
+  cat("######################################################\n")  
+
+  res <- read.xlsx2(file, sheetName="mixedTypes")
+  res <- read.xlsx2(file, sheetName="mixedTypes", colClasses=c(
+    "numeric", "character", rep("numeric", 4)))
+  
   
   cat("######################################################\n")
   cat("Test low level import ...\n")
   cat("######################################################\n")  
-  file <- paste(.Library, "/xlsx/tests/test_import.xlsx", sep="")
+  file <- system.file("tests", filename, package="xlsx")
 
   wb <- loadWorkbook(file)
   sheets <- getSheets(wb)

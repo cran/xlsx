@@ -6,7 +6,7 @@ printSetup <- function(sheet, fitHeight=NULL,
   headerMargin=NULL, landscape=FALSE, pageStart=NULL, paperSize=NULL,
   noColor=NULL)
 {
-  ps <- .jcall(sheet, "Lorg/apache/poi/xssf/usermodel/XSSFPrintSetup;",
+  ps <- .jcall(sheet, "Lorg/apache/poi/ss/usermodel/PrintSetup;",
                "getPrintSetup")
   
   if (!is.null(fitHeight))

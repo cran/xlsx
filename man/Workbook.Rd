@@ -9,7 +9,7 @@ Functions to manipulate Excel 2007 workbooks.
 }
 \usage{
 
-createWorkbook()
+createWorkbook(type="xlsx")
 
 loadWorkbook(file)
 
@@ -17,6 +17,8 @@ saveWorkbook(wb, file)
 
 }
 \arguments{
+  \item{type}{a String, either \code{xlsx} for Excel 2007 OOXML format,
+	or \code{xls} for Excel 95 binary format.}
   \item{file}{the \emph{absolute} path to the file which the data are to
     be read from.}
   \item{wb}{a workbook object as returned by \code{createWorkbook} or

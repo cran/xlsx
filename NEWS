@@ -1,9 +1,34 @@
 NEWS for package xlsx
 
+Changes in version 0.3.0 (released 2011-03-03)
+
+ o Effort has been made to make all functions of this package to be
+ agnostic between Excel versions.  You can now read, write and format
+ files in Excel versions 97/2000/XP/2003 (not 95!) with file extension
+ xls, in addition to Excel 2007 with file extension xlsx.
+ Please report issues you encounter.  Note that Colors are limited for
+ xls workbooks (see ?CellStyle).
+
+ o Read strings in a different encoding.  Thanks to Wincent Huang for
+ code contribution. Function ?getCellValue now has an encoding
+ argument. 
+
+ o Add support for Excel ranges.  Thanks to Wolfgang Abele for contributing
+ preliminary code.  See ?Range. 
+
+ o New function read.xlsx2 for reading spreadsheets.  By moving the
+ looping into java one gets a speed bump of one order of magnitude or
+ better over read.xlsx.  
+
+ o Documentation fixes.
+
+ o Move to version 3.7 for POI jars.  See http://poi.apache.org/.
+
+
 Changes in version 0.2.4 (released 2010-10-20)
 
  o New function write.xlsx2 in which the writing is done on the java
- side.  Speed improvements of one order of magnitude over write.xls on
+ side.  Speed improvements of one order of magnitude over write.xlsx on
  moderately large data.frames (100,000 elements).  
 
 

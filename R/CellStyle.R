@@ -26,16 +26,34 @@ createCellStyle <- function(wb, hAlign=NULL, vAlign=NULL, borderPosition=NULL,
         .jshort(xlsx:::.CELL_STYLES[borderPen])))
   }
 
-  if (!is.null(borderColor))
-     .jcall(cellStyle, "V", "setBorderColor", .xssfcolor(borderColor))
-  
-  if (!is.null(fillBackgroundColor))
-    .jcall(cellStyle, "V", "setFillBackgroundColor",
-       .xssfcolor(fillBackgroundColor))
-  
+  if (!is.null(borderColor)){
+     if (grepl("XSSF", wb$getClass()$getName())){ 
+       .jcall(cellStyle, "V", "setBorderColor", .xssfcolor(borderColor))
+     } else {
+       .jcall(cellStyle, "V", "setBorderColor",
+          .jshort(xlsx:::.INDEXED_COLORS[toupper(borderColor)]))
+     }
+   }
+
   if (!is.null(fillForegroundColor))
-    .jcall(cellStyle, "V", "setFillForegroundColor",
-       .xssfcolor(fillForegroundColor))
+    if (grepl("XSSF", wb$getClass()$getName())){ 
+      .jcall(cellStyle, "V", "setFillForegroundColor",
+         .xssfcolor(fillForegroundColor))
+    } else {
+      .jcall(cellStyle, "V", "setFillForegroundColor",
+         .jshort(xlsx:::.INDEXED_COLORS[toupper(fillForegroundColor)]))
+    }
+  
+  if (!is.null(fillBackgroundColor)){
+    if (grepl("XSSF", wb$getClass()$getName())){ 
+      .jcall(cellStyle, "V", "setFillBackgroundColor",
+         .xssfcolor(fillBackgroundColor))
+    } else {
+      .jcall(cellStyle, "V", "setFillBackgroundColor",
+         .jshort(xlsx:::.INDEXED_COLORS[toupper(fillBackgroundColor)]))
+    }
+  }
+  
   
   if (!is.null(fillPattern))
     .jcall(cellStyle, "V", "setFillPattern",

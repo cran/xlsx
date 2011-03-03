@@ -3,35 +3,28 @@
 \alias{xlsx}
 \docType{package}
 \title{
-  Read, write, format Excel 2007 (xlsx) files
+  Read, write, format Excel 2007 and Excel 97/2000/XP/2003 files
 }
 \description{
   
-  The \code{xlsx} package gives programatic control of Excel 2007 files
-  using R.  A high level API allows the user to read a sheet of an
-  xlsx document into a \code{data.frame} and write a \code{data.frame}
-  to an xlsx file.  Lower level functionality permits the direct
-  manipulation of sheets, rows and cells.  For example, the user has 
-  control to set colors, fonts, data formats, add borders, hide/unhide
-  sheets, add/remove rows, add/remove sheets, etc.
+  The \code{xlsx} package gives programatic control of Excel files using
+  R.  A high level API allows the user to read a sheet of an xlsx
+  document into a \code{data.frame} and write a \code{data.frame} to a
+  file.  Lower level functionality permits the direct manipulation of
+  sheets, rows and cells.  For example, the user has control to set
+  colors, fonts, data formats, add borders, hide/unhide sheets,
+  add/remove rows, add/remove sheets, etc.
   
   Behind the scenes, the \code{xlsx} package uses a java library from
   the Apache project, \url{http://poi.apache.org/index.html}.  This
   Apache project provides a Java API to Microsoft Documents (Excel,
   Word, PowerPoint, Outlook, Visio, etc.)  By using the \code{rJava}
-  package that links \R and Java, we can piggyback on the excellent
-  work already done by the folks at the Apache project and provide this
+  package that links \R and Java, we can piggyback on the excellent work
+  already done by the folks at the Apache project and provide this
   functionality in R.  The \code{xlsx} package uses only a subset of the
-  Apache POI project, namely the one dealing with Excel 2007 files.  All
-  the necessary jar files are kept in package \code{xlsxjars} that is
+  Apache POI project, namely the one dealing with Excel files.  All the
+  necessary jar files are kept in package \code{xlsxjars} that is
   imported by package \code{xlsx}.
-  
-  A package with similar functionality to \code{xlsx} is maintained
-  by Duncan Temple Lang at \url{http://www.omegahat.org/RExcelXML/}.
-  The approach taken there is to directly process the underlying
-  \code{XML} files.  You should check it out as that approach may be
-  superior in certain cases.  For example, the package \code{xlsx} has a
-  bigger memory footprint and struggles to read/write large xlsx files.
   
   A collection of tests that can be used as examples are located 
   in folder \code{/tests/}.
@@ -47,8 +40,8 @@
 \tabular{ll}{
 Package: \tab xlsx\cr
 Type: \tab Package\cr
-Version: \tab 0.2.4\cr
-Date: \tab 2010-10-20\cr
+Version: \tab 0.3.0\cr
+Date: \tab 2011-03-03\cr
 License: \tab GPL-3\cr
 }
 
@@ -68,7 +61,7 @@ Maintainer: Adrian A. Dragulescu <adrian.dragulescu@gmail.com>
   if you are looking for something that is not exposed in R as it may be
   available on the Java side.  Inspecting the source code for some the
   the \R functions in this package can show you how to do it (even if
-  you are java shy). 
+  you are Java shy). 
 }
 \keyword{ package }
 \seealso{\code{\link{Workbook}} for ways to work with \code{Workbook}
@@ -84,7 +77,7 @@ res <- read.xlsx(file, 2)  # read the second sheet
 
 # example of writing xlsx sheets
 file <- tempfile()
-write.xls(USArrests, file=file)
+write.xlsx(USArrests, file=file)
 
 }
 }

@@ -103,6 +103,9 @@ getCellStyle(cell)
   implies that setting colors on Mac will not work as is!  A set of
   about 50 basic colors are still available please see the javadocs. 
 
+  For Excel 95/2000/XP/2003 the choice of colors is limited.  See
+  \code{xlsx:::.INDEXED_COLORS} for the list of available colors.  
+  
   Unspecified values for arguments are taken from the system locale.  
   
 }

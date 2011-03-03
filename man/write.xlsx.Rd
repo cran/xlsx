@@ -43,11 +43,11 @@ adds to processing time.
 
 If \code{x} is not a \code{data.frame} it will be converted to one.
 
-NEW (in version 0.2.4) function \code{write.xlsx2} uses java internally
-for looping and the result is a significant improvement in performance.
-Please see the source file for an example of how to implent a custom
-write function.  Only integer, numeric and character columns are
-supported.  Other column types are converted to character.  
+Function \code{write.xlsx2} uses Java internally for looping and the
+result is a significant improvement in performance.  Please see the
+source file for an example of how to implent a custom write function.
+Only integer, numeric and character columns are supported.  Other column
+types are converted to character.
 
 }
 \author{ Adrian Dragulescu }

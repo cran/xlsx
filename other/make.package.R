@@ -58,15 +58,19 @@
   if (computer=="WORK"){
     pkgdir  <<- "H:/user/R/Adrian/findataweb/temp/xlsx/trunk/"
     outdir  <<- "H:/"
-    Rcmd    <<- "S:/All/Risk/Software/R/R-2.11.1/bin/Rcmd"
+    Rcmd    <<- "S:/All/Risk/Software/R/R-2.12.1/bin/i386/Rcmd"
     javadir <<- "C:/Documents and Settings/e47187/workspace/xlsx/"
   } else if (computer == "LAPTOP"){
     pkgdir    <<- "C:/Users/adrian/R/findataweb/temp/xlsx/trunk/"
     outdir    <<- "C:/"
-    Rcmd      <<- '"C:/Program Files/R/R-2.11.0/bin/Rcmd"'
+    Rcmd      <<- '"C:/Program Files/R/R-2.12.1/bin/i386/Rcmd"'
     javadir   <<- "C:/Users/home/workspace/xlsx/"
     rforgedir <<- "C:/Users/adrian/R/R-Forge/xlsx/"
-  } else if (computer == "HOME"){
+  } else if (computer == "WORK2"){
+    pkgdir  <<- "H:/user/R/Adrian/findataweb/temp/xlsx/trunk/"
+    outdir  <<- "H:/"
+    Rcmd    <<- '"C:/Program Files/R/R-2.12.2/bin/i386/Rcmd"'
+    javadir <<- "C:/Documents and Settings/e47187/workspace/xlsx/"
   } else {
   }
 
@@ -77,14 +81,14 @@
 ##################################################################
 
 #version <- NULL        # keep increasing the minor
-version <- "0.2.4"     # if you want to set it by hand
+version <- "0.3.0"     # if you want to set it by hand
 
 .setEnv("WORK")   # "WORK" "LAPTOP"
 
 .move.java.classes(TRUE)  # move java classes
 
 # change the version
-#version <- .update.DESCRIPTION(pkgdir, version)
+version <- .update.DESCRIPTION(pkgdir, version)
 
 # make the package
 setwd(outdir)

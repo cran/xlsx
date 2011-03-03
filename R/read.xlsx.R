@@ -3,7 +3,7 @@
 #
 read.xlsx <- function(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
   colIndex=NULL, as.data.frame=TRUE, header=TRUE, colClasses=NA,
-  keepFormulas=FALSE, ...)
+  keepFormulas=FALSE, encoding="unknown", ...)
 {
   if (is.null(sheetName) & missing(sheetIndex))
     stop("Please provide a sheet name OR a sheet index.")
@@ -19,7 +19,8 @@ read.xlsx <- function(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
 
   rows  <- getRows(sheet, rowIndex)  
   cells <- getCells(rows, colIndex)
-  res <- lapply(cells, getCellValue, keepFormulas=keepFormulas)
+  res <- lapply(cells, getCellValue, keepFormulas=keepFormulas,
+                encoding=encoding)
   
   if (as.data.frame){
     # need to use the index from the names because of empty cells

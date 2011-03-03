@@ -2,7 +2,7 @@
 #
 #
 
-test.dataFormats <- function()
+test.dataFormats <- function(type="xlsx")
 {  
   require(xlsx)
   Sys.setenv(tz="")
@@ -18,7 +18,7 @@ test.dataFormats <- function()
     rnorm=10000*rnorm(10),
     datetime=seq(as.POSIXct("2009-01-01 00:00:00"), by="1 hour", length.out=10))
 
-  wb <- createWorkbook()
+  wb <- createWorkbook(type=type)
   sheet <- createSheet(wb, "Sheet1")
   rows  <- createRow(sheet, 1:10)          # 10 rows
   cells <- createCell(rows, col=1:8)       # 8 columns
@@ -47,7 +47,7 @@ test.dataFormats <- function()
   #cellStyle1$getDataFormat()
   lapply(cells[,7], setCellStyle, cellStyle4)
 
-  file <- "C:/Temp/test_dataFormats.xlsx"
+  file <- paste("C:/Temp/test_dataFormats.", type, sep="")
   saveWorkbook(wb, file)
   cat("Wrote file ", file, "\n\n")
 

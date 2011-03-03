@@ -2,7 +2,7 @@
 #
 #
 
-test.export <- function(outdir="C:/Temp/")
+test.export <- function(outdir="C:/Temp/", type="xlsx")
 {
   cat("####################################################\n")
   cat("Test high level export ... \n")
@@ -12,7 +12,7 @@ test.export <- function(outdir="C:/Temp/")
     date=seq(as.Date("2009-01-01"), by="1 month", length.out=10),
     bool=ifelse(1:10 %% 2, TRUE, FALSE))
 
-  file <- paste(outdir, "test_export.xlsx", sep="")
+  file <- paste(outdir, "test_export.", type, sep="")
   cat("Write an xlsx file with char, int, double, date, bool columns ...\n")
   write.xlsx(x, file)
   cat("Wrote file ", file, "\n\n")
@@ -48,7 +48,7 @@ test.export <- function(outdir="C:/Temp/")
   print(system.time(write.xlsx(x, file)))   # 206 seconds
   print(system.time(write.xlsx2(x, file)))  # 31 seconds
   cat("Wrote file ", file, "\n\n")
-  
+
 }
 
 

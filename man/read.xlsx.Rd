@@ -1,5 +1,6 @@
 \name{read.xlsx}
 \alias{read.xlsx}
+\alias{read.xlsx2}
 \title{ Read the contents of a worksheet into an R data.frame}
 \description{
 Read the contents of a worksheet into an R \code{data.frame}.
@@ -7,7 +8,12 @@ Read the contents of a worksheet into an R \code{data.frame}.
 \usage{
 read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
   colIndex=NULL, as.data.frame=TRUE, header=TRUE, colClasses=NA,
-  keepFormulas=FALSE, ...)
+  keepFormulas=FALSE, encoding="unknown", ...)
+
+read.xlsx2(file, sheetIndex, sheetName=NULL, startRow=1,
+  startColumn=1, noRows=NULL, noColumns=NULL, as.data.frame=TRUE,
+  header=TRUE, colClasses="character")
+
 }
 \arguments{ 
   \item{file}{the \emph{absolute} path to the file which the data are to
@@ -20,28 +26,38 @@ read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
     extract.  If \code{NULL}, all columns found will be extracted.}  
   \item{as.data.frame}{a logical value indicating if the result should
     be coerced into a \code{data.frame}.  If \code{FALSE}, the result is
-    a list with one element for each non empty cell.  The name for each
-    element of this list is formed by pasting together the row index
-    with the colum index separated by \emph{.}.}     
+    a list with one element for each column.}     
   \item{header}{a logical value indicating whether the first row
     corresponding to the first element of the \code{rowIndex} vector
     contains the names of the variables.}
-  \item{colClasses}{a vector of classes to be assumed for the columns.
-    Recycled as necessary, or if the character vector is named,
-    unspecified values are taken to be \code{NA}.}
+  \item{colClasses}{For \code{read.xlsx} a character vector that
+	represent the class of each column.  Recycled as necessary, or if
+	the character vector is named, unspecified values are taken to be
+	\code{NA}.  For \code{read.xlsx2} A character vector, recycled if
+	necessary.  Only \code{numeric} and \code{character} values are
+	allowed. }
   \item{keepFormulas}{a logical value indicating if Excel formulas
     should be shown as text in \R and not evaluated before bringing them
     in.}
+  \item{encoding}{encoding to be assumed for input strings.  See
+	\code{\link[utils]{read.table}}.}
+  \item{startRow}{an numeric specifying the index of starting row.}
+  \item{startColumn}{an numeric specifying the index of starting column.}
+  \item{noRows}{an numeric specifying how many rows to pull.  If
+	\code{NULL}, read all the rows in the sheet.}
+  \item{noColumns}{an numeric specifying how many columns to pull.  If
+	\code{NULL}, read all the colums from the \code{startRow}.}
+  
   \item{\ldots}{other arguments to \code{data.frame}, for example
-    \code{stringsAsFactors}.}
+    \code{stringsAsFactors}} 
 }
 
 \details{
   
-This function provides a high level API for reading data from an Excel
-2007 worksheet.  It calls several low level functions in the process.
-Its goal is to provide the conveniency of \code{\link[utils]{read.csv}}
-by borrowing from its signature. 
+The \code{read.xlsx} function provides a high level API for reading data
+from an Excel 2007 worksheet.  It calls several low level functions in
+the process.  Its goal is to provide the conveniency of
+\code{\link[utils]{read.table}} by borrowing from its signature. 
 
 The function pulls the value of each non empty cell in the worksheet
 into a vector of type \code{list} by preserving the data type.  If
@@ -58,14 +74,20 @@ Excel internally stores dates and datetimes as numeric values, and does
 not keep track of time zones and DST.  When a datetime column is 
 brought into \R, it is converted to \code{POSIXct} class with a
 \emph{GMT} timezone.  Occasional rounding errors may appear and the \R
-and Excel string representation my differ by one second.
-   
+and Excel string representation my differ by one second.  For
+\code{read.xlsx2} bring in a datetime column as a numeric one and then
+convert to class \code{POSIXct} or \code{Date}.   
+
+The \code{read.xlsx2} function does more work in Java so it achieves
+much better performance.  The result of \code{read.xlsx2} will in
+general be different from \code{read.xlsx}.  More performance gains can
+be made for particular cases; read the source code to understand the
+approach in \code{read.xlsx2}.
+
 }
 \value{
-  A data.frame containing the data as downloaded from the worksheet.  The
-  rownames of the dataframe are the unique list id's used internally by
-  Google.  You need these unique id's if you want to overwrite the rows
-  of the spreadsheet. 
+  A data.frame or a list, depending on the \code{as.data.frame}
+  argument. 
 }
 \author{ Adrian Dragulescu }
 \seealso{\code{\link{write.xlsx}} for writing \code{xlsx} documents.
@@ -87,6 +109,13 @@ head(res)
 # 6   Colorado       2541   4884        0.7    72.06    6.8    63.9   166 103766
 # >
 
+
+# To convert an Excel datetime colum to POSIXct, do something like:
+#   as.POSIXct((x-25569)*86400, tz="GMT", origin="1970-01-01")
+# For Dates, use a conversion like:
+#   as.Date(x-25569, origin="1970-01-01") 
+
+res2 <- read.xlsx2(file, 1)  # all columns returned characters
 
 }
 }

@@ -2,14 +2,14 @@
 #
 #
 
-test.workbook <- function()
+test.workbook <- function(type="xlsx")
 {
   cat("##################################################\n")
   cat("Testing basic workbook functions\n")
   cat("##################################################\n")
 
   cat("Create an empty workbook ... ") 
-  wb <- createWorkbook()
+  wb <- createWorkbook(type=type)
   cat("OK\n")
 
   cat("Create a sheet called 'Sheet1' ... ")
@@ -37,7 +37,8 @@ test.workbook <- function()
   cat("OK\n")
 
   cat("Remove rows 1:10 on Sheet1 of test_import.xlsx ... ")
-  file <- system.file("tests", "test_import.xlsx", package = "xlsx")
+  filename <- paste("test_import.", type, sep="")
+  file <- system.file("tests", filename, package="xlsx")
   wb <- loadWorkbook(file)  
   sheets <- getSheets(wb)
   sheet <- sheets[[1]]  
@@ -46,9 +47,6 @@ test.workbook <- function()
   rows  <- getRows(sheet)           # get all the rows
   stopifnot(length(rows) == 41)
   cat("OK\n")
-  
-  
-  
   
 }
 

@@ -2,13 +2,13 @@
 #
 #
 
-test.otherEffects <- function(dirout="C:/Temp/")
+test.otherEffects <- function(dirout="C:/Temp/", type="xlsx")
 {  
   require(xlsx)
 
   cat("Start testing other effects!\n")
 
-  wb <- createWorkbook()
+  wb <- createWorkbook(type=type)
   sheet1 <- createSheet(wb, "Sheet1")
   rows   <- createRow(sheet1, 1:10)              # 10 rows
   cells  <- createCell(rows, colIndex=1:8)       # 8 columns
@@ -32,7 +32,7 @@ test.otherEffects <- function(dirout="C:/Temp/")
   createSplitPane(sheet3, 2000, 2000, 1, 1, "PANE_LOWER_LEFT")
   
  
-  file <- paste(dirout, "test_otherEffects.xlsx", sep="")
+  file <- paste(dirout, "test_otherEffects.", type, sep="")
   saveWorkbook(wb, file)
   cat("Saved file", file, "\n")
   

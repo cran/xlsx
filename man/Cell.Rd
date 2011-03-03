@@ -17,9 +17,9 @@ getCells(row, colIndex=NULL, simplify=TRUE)
 
 setCellValue(cell, value, richTextString=FALSE)
 
-getCellValue(cell, keepFormulas=FALSE)
+getCellValue(cell, keepFormulas=FALSE, encoding="unknown")
 
-getMatrixValues(sheet, rowIndex, colIndex)
+getMatrixValues(sheet, rowIndex, colIndex, ...)
 
 }
 \arguments{
@@ -33,8 +33,10 @@ getMatrixValues(sheet, rowIndex, colIndex)
     be inserted into the Excel cell as rich text.}
   \item{keepFormulas}{a logical value.  If \code{TRUE} the formulas will 
     be returned as characters instead of being explicitly evaluated.}
+  \item{encoding}{A character value to set the encoding, for example "UTF-8".}
   \item{cell}{a \code{Cell} object.}
   \item{sheet}{a \code{Sheet} object.}
+  \item{\ldots}{other arguments to be passed to \code{getCellValue}.}
 }
 
 \value{

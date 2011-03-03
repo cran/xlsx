@@ -2,12 +2,12 @@
 #
 #
 
-test.comments <- function(dirout="C:/Temp/")
+test.comments <- function(dirout="C:/Temp/", type="xlsx")
 {
   cat("###################################################\n")
   cat("Start testing comments\n")
 
-  wb <- createWorkbook()
+  wb <- createWorkbook(type=type)
   sheet1 <- createSheet(wb, "Sheet1")
   rows   <- createRow(sheet1, rowIndex=1:10)     # 10 rows
   cells  <- createCell(rows, colIndex=1:8)       # 8 columns
@@ -17,16 +17,16 @@ test.comments <- function(dirout="C:/Temp/")
 
   createCellComment(cell1, "Cogito", author="Descartes")
   
-  file <- paste(dirout, "test_comments.xlsx", sep="")
+  file <- paste(dirout, "test_comments.", type, sep="")
   saveWorkbook(wb, file)
   cat("Saved file", file, "\n")
 
   comment <- getCellComment(cell1)
   stopifnot(comment$getAuthor()=="Descartes")
   stopifnot(comment$getString()$toString()=="Cogito")
-  
-
 }
+
+
 
 
 ##   factory <- .jcall(wb,

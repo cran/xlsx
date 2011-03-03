@@ -2,15 +2,14 @@
 #
 #
 
-test.formats <- function(outdir="C:/Temp/")
+test.formats <- function(outdir="C:/Temp/", type="xlsx")
 {  
   cat("##################################################\n")
   cat("Testing COLORS, FILLS, BORDERS ...\n")
   cat("##################################################\n")
-  
 
   cat("Create an empty workbook ... ") 
-  wb <- createWorkbook()
+  wb <- createWorkbook(type=type)
   sheet <- createSheet(wb, "Sheet1")
   cat("OK\n")
 
@@ -38,7 +37,7 @@ test.formats <- function(outdir="C:/Temp/")
   setCellValue(cell.2, "Dashed right border, yellow fill, red hashes")
   cellStyle2 <- createCellStyle(wb, borderPosition="RIGHT",
     borderPen="BORDER_DASHED", fillBackgroundColor="yellow",
-    fillForegroundColor="tomato", fillPattern="BIG_SPOTS")
+    fillForegroundColor="red", fillPattern="BIG_SPOTS")
   setCellStyle(cell.2, cellStyle2)   # does not set the background?!
   cat("OK\n")
 
@@ -47,9 +46,9 @@ test.formats <- function(outdir="C:/Temp/")
   cell.3 <- createCell(rows[5], col=1)[[1,1]]      
   setCellValue(cell.3, "Courier New, Italicised")
   font3 <- createFont(wb, fontHeightInPoints=20, isBold=TRUE, isItalic=TRUE,
-    fontName="Courier New", color="tomato")
-  cellStyle3 <- createCellStyle(wb, fillBackgroundColor="skyblue",
-    fillForegroundColor="skyblue", fillPattern="SOLID_FOREGROUND",
+    fontName="Courier New", color="orange")
+  cellStyle3 <- createCellStyle(wb, fillBackgroundColor="turquoise",
+    fillForegroundColor="turquoise", fillPattern="SOLID_FOREGROUND",
     font=font3)
   setCellStyle(cell.3, cellStyle3)   # does not set the background?!
   cat("OK\n")
@@ -65,68 +64,16 @@ test.formats <- function(outdir="C:/Temp/")
   autoSizeColumn(sheet, 1)  # test autosizing
   cat("OK\n")
 
-  file <- paste(outdir, "test_export_colors.xlsx", sep="")
+  file <- paste(outdir, "test_export_colors.", type, sep="")
   saveWorkbook(wb, file)
   cat("Wrote file ", file, "\n\n")
-  cat("Please check the file if OK\n")
+  cat("Please check if the file is OK\n")
   
 }
 
 
 
 
-
-  #########################################################################
-  #  Test comments -- DOES NOT WORK YET.  KNOWN BUG with POI!
-  #########################################################################
-
-  # add a comment
-  #cmnt <- createComment("Does it work?", 1, 3, sheet, author="Plato")
-  #getCellComment(1,3,sheet)
-
-##   x <- "Does it work??!"; row <- 0; col <- 0
-##   cHelper <- .jcall(wb, "Lorg/apache/poi/xssf/usermodel/XSSFCreationHelper;",
-##     "getCreationHelper")
-##   rts <- .jcall(cHelper, "Lorg/apache/poi/ss/usermodel/RichTextString;",
-##     "createRichTextString", x)
-##   cmnt2 <- createComment(rts, row, col, sheet, author="Plato")
-
-
-## wb <- createWorkbook()
-## sheet <- createSheet(wb, "Sheet1")
-## rows  <- createRow(sheet, 1:10)          # 10 rows
-
-## cells <- createCell(rows, cell=1:5)      # 5 columns
-
-## # create a test data.frame
-## data <- data.frame(mon=month.abb[1:10], day=1:10, year=2000:2009,
-##   date=seq(as.Date("2009-01-01"), by="1 month", length.out=10),
-##   bool=ifelse(1:10 %% 2, TRUE, FALSE))
-
-## # set value of one cell by hand 
-## setCellValue(cells[[1,1]], data[1,1])
-
-## # or do them all by looping over columns
-## for (ic in 1:ncol(data))
-##   mapply(setCellValue, cells[,ic], data[,ic])
-
-
-## file <- "C:/Temp/test_export.xlsx"
-## saveWorkbook(wb, file)
-
-
-## ########################## test dates and datetime objects #############
-
-## wb <- createWorkbook()
-## sheet <- createSheet(wb, "Sheet1")
-## rows  <- createRow(sheet, 1)          # 1 rows
-
-## cells <- createCell(rows, cell=1)      # 1 columns
-
-## setCellValue(cells[[1,1]], as.Date("2009-11-16"))
-
-## file <- "C:/Temp/test_export.xlsx"
-## saveWorkbook(wb, file)
 
 
 

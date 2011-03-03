@@ -2,7 +2,7 @@
 #
 #
 
-test.picture <- function(outdir="C:/Temp/")
+test.picture <- function(outdir="C:/Temp/", type="xlsx")
 {
   cat("##################################################\n")
   cat("Test embedding an R picture into an xlsx document\n")
@@ -10,21 +10,15 @@ test.picture <- function(outdir="C:/Temp/")
 
   cat("Add log_plot.jpeg to a new xlsx...")
   picname <- system.file("tests", "log_plot.jpeg", package="xlsx")
-  wb <- createWorkbook()
+  wb <- createWorkbook(type=type)
   sheet <- createSheet(wb, "Sheet1")
 
   addPicture(picname, sheet)
   
-  file <- paste(outdir, "test_picture.xlsx", sep="")
+  file <- paste(outdir, "test_picture.", type, sep="")
   saveWorkbook(wb, file)
   cat("Wrote file:", file, "\n")
-      
-
-##   wb <- loadWorkbook(file)
-##   allPictures <- wb$getAllPictures()
-  
-  
-  
+        
 }
 
 ##  pic_ext <- paste("PICTURE_TYPE_",

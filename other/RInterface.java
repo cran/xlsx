@@ -1,9 +1,7 @@
 package dev;
 
 
-//import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
-//import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
@@ -14,9 +12,8 @@ public class RInterface {
   public Cell[][] CELL_ARRAY;
   
   
-  
    /*
-    * Make rows, and cells.  Return the sheet.
+    * Make rows, and cells.
     */
    public void createCells(Sheet sheet, int startRowIndex, int startColIndex) {
      int i;
@@ -31,7 +28,126 @@ public class RInterface {
    }
  
    /*
-    * Write a column of floats to the sheet.
+    * Read a column of doubles from the sheet.  If the cell is not a Number show a NaN!
+    */
+   public double[] readColDoubles(Sheet sheet, int startRowIndex, int endRowIndex, int colIndex) {
+     
+     int N = endRowIndex - startRowIndex + 1;
+     double[] res = new double[N];
+     for (int i=0; i<N; i++) {
+       Row row = sheet.getRow(startRowIndex+i);
+       Cell cell = row.getCell(colIndex, Row.CREATE_NULL_AS_BLANK);
+ 
+       switch(cell.getCellType()) {
+       case Cell.CELL_TYPE_STRING:
+         try {
+           res[i] = Double.valueOf(cell.getStringCellValue()).doubleValue();
+         } catch (NumberFormatException nfe) {
+           //System.out.println("NumberFormatException: " + nfe.getMessage());
+           res[i] = Double.NaN; 
+         }
+         break;
+       case Cell.CELL_TYPE_NUMERIC:
+         res[i] = cell.getNumericCellValue();
+         break;
+       case Cell.CELL_TYPE_FORMULA:
+         try {
+           res[i] = cell.getNumericCellValue();
+         } catch (IllegalStateException e) {
+           res[i] = Double.NaN;  // cell.getCellFormula();
+         }
+         break;
+       case Cell.CELL_TYPE_BOOLEAN:
+         res[i] = (double) (cell.getBooleanCellValue()?1:0);
+         break;
+       case Cell.CELL_TYPE_ERROR:
+         res[i] = Double.NaN;
+         break;
+       default:
+         res[i] = Double.NaN;
+       }
+     }
+     
+     return res;
+   }
+
+   /*
+    * Read a column of Strings from the sheet.  If the cell type is not a String, convert to String!
+    */
+   public String[] readColStrings(Sheet sheet, int startRowIndex, int endRowIndex, int colIndex) {
+     
+     int N = endRowIndex - startRowIndex + 1;
+     String[] res = new String[N];
+     for (int i=0; i<N; i++) {
+       Row row = sheet.getRow(startRowIndex+i);
+       Cell cell = row.getCell(colIndex, Row.CREATE_NULL_AS_BLANK); 
+       switch(cell.getCellType()) {
+         case Cell.CELL_TYPE_STRING:
+           res[i] = cell.getStringCellValue();
+           break;
+         case Cell.CELL_TYPE_NUMERIC:
+           res[i] = Double.toString(cell.getNumericCellValue());
+           break;
+         case Cell.CELL_TYPE_FORMULA:
+           try {
+             res[i] = cell.getStringCellValue();
+           } catch (IllegalStateException e) {
+             res[i] = "NA";  // cell.getCellFormula();
+           }
+           break;
+         case Cell.CELL_TYPE_BOOLEAN:
+           res[i] = new Boolean(cell.getBooleanCellValue()).toString();
+           break;
+         case Cell.CELL_TYPE_BLANK:
+           res[i] = "";
+           break;
+         case Cell.CELL_TYPE_ERROR:
+           res[i] = "ERROR";
+           break;
+         default:
+           res[i] = "";
+       }
+     }
+     
+     return res;
+   }
+ 
+   
+   /*
+    * Read a row of Strings from the sheet
+    */
+   public String[] readRowStrings(Sheet sheet, int startColIndex, int endColIndex, int rowIndex) {
+     
+     int N = endColIndex - startColIndex + 1;
+     String[] res = new String[N];
+     Row row = sheet.getRow(rowIndex);
+     for (int i=0; i<N; i++) {
+       Cell cell = row.getCell(startColIndex+i, Row.CREATE_NULL_AS_BLANK); 
+       switch(cell.getCellType()) {
+       case Cell.CELL_TYPE_STRING:
+         res[i] = cell.getStringCellValue();
+         break;
+       case Cell.CELL_TYPE_NUMERIC:
+         res[i] = Double.toString(cell.getNumericCellValue());
+         break;
+       case Cell.CELL_TYPE_FORMULA:
+         res[i] = cell.getStringCellValue();
+         break;
+       case Cell.CELL_TYPE_BOOLEAN:
+         res[i] = new Boolean(cell.getBooleanCellValue()).toString();
+         break;
+       default:
+         res[i] = "";
+       }
+     }
+     
+     return res;
+   }
+   
+   
+  
+   /*
+    * Write a column of doubles to the sheet.
     */
    public void writeColDoubles(Sheet sheet, int startRowIndex, int startColIndex, 
      double[] data){
@@ -43,7 +159,7 @@ public class RInterface {
    }
 
    /*
-    * Write a column of floats to the sheet.
+    * Write a column of ints to the sheet.
     */
    public void writeColInts(Sheet sheet, int startRowIndex, int startColIndex, 
      int[] data){

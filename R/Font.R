@@ -10,8 +10,13 @@ createFont <- function(wb, color=NULL, fontHeightInPoints=NULL, fontName=NULL,
     "createFont") 
 
   if (!is.null(color))
-    .jcall(font, "V", "setColor", .xssfcolor(color))   
-
+    if (grepl("XSSF", wb$getClass()$getName())){ 
+      .jcall(font, "V", "setColor", .xssfcolor(color))   
+    } else {
+      .jcall(font, "V", "setColor",
+        .jshort(xlsx:::.INDEXED_COLORS[toupper(color)]))
+    }
+      
   if (!is.null(fontHeightInPoints))
     .jcall(font, "V", "setFontHeightInPoints", .jshort(fontHeightInPoints))
 
@@ -24,7 +29,7 @@ createFont <- function(wb, color=NULL, fontHeightInPoints=NULL, fontName=NULL,
   if (isStrikeout)
     .jcall(font, "V", "setStrikeout", TRUE)
 
-  if (isBold)
+  if (isBold & grepl("XSSF", wb$getClass()$getName()))
     .jcall(font, "V", "setBold", TRUE)
 
   if (!is.null(boldweight))

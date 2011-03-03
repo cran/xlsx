@@ -36,7 +36,7 @@ getCells <- function(row, colIndex=NULL, simplify=TRUE)
     rowCells <- vector("list", length=nC)
     namesCells <- vector("character", length=nC)
     for (ic in seq_along(rowCells)){
-      aux <- .jcall(row[[ir]], "Lorg/apache/poi/xssf/usermodel/XSSFCell;",
+      aux <- .jcall(row[[ir]], "Lorg/apache/poi/ss/usermodel/Cell;",
         "getCell", colIx[ic])
       if (!is.null(aux)){
         rowCells[[ic]] <- aux
@@ -75,7 +75,7 @@ setCellValue <- function(cell, value, richTextString=FALSE)
     as.character(value))  # for factors and other types
 
   if (richTextString)
-    value <- .jnew("org/apache/poi/xssf/usermodel/XSSFRichTextString",
+    value <- .jnew("org/apache/poi/sf/usermodel/RichTextString",
       as.character(value))  # do I need to convert to as.character ?!!
   
   invisible(.jcall(cell, "V", "setCellValue", value))
@@ -87,28 +87,36 @@ setCellValue <- function(cell, value, richTextString=FALSE)
 # Not happy with the case when you have formulas.  Still not general
 #   enough.  We'll see how many things still not work.
 #
-getCellValue <- function(cell, keepFormulas=FALSE)
+getCellValue <- function(cell, keepFormulas=FALSE, encoding="unknown")
 {
   cellType <- .jcall(cell, "I", "getCellType") + 1
   value <- switch(cellType,
-    .jcall(cell, "D", "getNumericCellValue"),        # numeric              
-    .jcall(.jcall(cell,
-      "Lorg/apache/poi/xssf/usermodel/XSSFRichTextString;",
-      "getRichStringCellValue"), "S", "toString"),   # string
-    ifelse(keepFormulas, .jcall(cell, "S", "getCellFormula"),   # formula
-      tryCatch(.jcall(cell, "D", "getNumericCellValue"),
-        error=function(e){
-          tryCatch(.jcall(cell, "S", "getStringCellValue"),
+    .jcall(cell, "D", "getNumericCellValue"),        # numeric
+                  
+    {strVal <- .jcall(.jcall(cell,                   # string
+      "Lorg/apache/poi/ss/usermodel/RichTextString;",
+      "getRichStringCellValue"), "S", "toString");
+     if (encoding=="unknown") {strVal} else {Encoding(strVal) <- encoding; strVal}
+   },  
+                  
+    ifelse(keepFormulas, .jcall(cell, "S", "getCellFormula"),   # if a formula
+      tryCatch(.jcall(cell, "D", "getNumericCellValue"),        # try to extract  
+        error=function(e){                                      # contents  
+          tryCatch(.jcall(cell, "S", "getStringCellValue"),     
             error=function(e){
               tryCatch(.jcall(cell, "Z", "getBooleanCellValue"),
                 error=function(e)e,
                 finally=NA)
             }, finally=NA)
         }, finally=NA)
-    ),  
+    ),
+                  
     NA,                                              # blank cell
+                  
     .jcall(cell, "Z", "getBooleanCellValue"),        # boolean
+                  
     NA, #ifelse(keepErrors, .jcall(cell, "B", "getErrorCellValue"), NA), # error
+                  
     "Error"                                          # catch all
   ) 
 
@@ -120,14 +128,14 @@ getCellValue <- function(cell, keepFormulas=FALSE)
 # get values for a block
 # How do conversion work?
 #
-getMatrixValues <- function(sheet, rowIndex, colIndex)
+getMatrixValues <- function(sheet, rowIndex, colIndex, ...)
 {
   nr <- length(rowIndex)
   nc <- length(colIndex)
   rows  <- getRows(sheet, rowIndex=rowIndex)
   cells <- getCells(rows, colIndex=colIndex)
   
-  cc <- lapply(cells, getCellValue)
+  cc <- lapply(cells, getCellValue, ...)
   cc <- unlist(cc)
   if (length(cc)==nr*nc){        # you don't have missing cells 
     cc <- matrix(cc, nrow=nr, ncol=nc, byrow=TRUE, 
