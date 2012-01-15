@@ -10,9 +10,9 @@ Functions to manipulate worksheets.
 }
 \usage{
 
-createSheet(wb, sheetName="Sheet 1")
+createSheet(wb, sheetName="Sheet1")
 
-removeSheet(wb, sheetName="Sheet 1")
+removeSheet(wb, sheetName="Sheet1")
 
 getSheets(wb)
 

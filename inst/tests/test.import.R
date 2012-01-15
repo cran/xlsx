@@ -88,6 +88,10 @@ test.import <- function(outdir="C:/Temp/", type="xlsx",
   res <- read.xlsx2(file, sheetName="mixedTypes")
   res <- read.xlsx2(file, sheetName="mixedTypes", colClasses=c(
     "numeric", "character", rep("numeric", 4)))
+
+  res <- read.xlsx2(file, sheetName="mixedTypes", startRow=2, noRows=3)
+ 
+  
   
   
   cat("######################################################\n")

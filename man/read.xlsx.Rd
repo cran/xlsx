@@ -11,9 +11,8 @@ read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
   keepFormulas=FALSE, encoding="unknown", ...)
 
 read.xlsx2(file, sheetIndex, sheetName=NULL, startRow=1,
-  startColumn=1, noRows=NULL, noColumns=NULL, as.data.frame=TRUE,
-  header=TRUE, colClasses="character")
-
+  colIndex=NULL, endRow=NULL, as.data.frame=TRUE, header=TRUE,
+  colClasses="character", ...)
 }
 \arguments{ 
   \item{file}{the \emph{absolute} path to the file which the data are to
@@ -42,12 +41,8 @@ read.xlsx2(file, sheetIndex, sheetName=NULL, startRow=1,
   \item{encoding}{encoding to be assumed for input strings.  See
 	\code{\link[utils]{read.table}}.}
   \item{startRow}{an numeric specifying the index of starting row.}
-  \item{startColumn}{an numeric specifying the index of starting column.}
-  \item{noRows}{an numeric specifying how many rows to pull.  If
+  \item{endRow}{an numeric specifying the index of the last row to pull.  If
 	\code{NULL}, read all the rows in the sheet.}
-  \item{noColumns}{an numeric specifying how many columns to pull.  If
-	\code{NULL}, read all the colums from the \code{startRow}.}
-  
   \item{\ldots}{other arguments to \code{data.frame}, for example
     \code{stringsAsFactors}} 
 }
@@ -55,7 +50,7 @@ read.xlsx2(file, sheetIndex, sheetName=NULL, startRow=1,
 \details{
   
 The \code{read.xlsx} function provides a high level API for reading data
-from an Excel 2007 worksheet.  It calls several low level functions in
+from an Excel worksheet.  It calls several low level functions in
 the process.  Its goal is to provide the conveniency of
 \code{\link[utils]{read.table}} by borrowing from its signature. 
 
@@ -79,10 +74,11 @@ and Excel string representation my differ by one second.  For
 convert to class \code{POSIXct} or \code{Date}.   
 
 The \code{read.xlsx2} function does more work in Java so it achieves
-much better performance.  The result of \code{read.xlsx2} will in
-general be different from \code{read.xlsx}.  More performance gains can
-be made for particular cases; read the source code to understand the
-approach in \code{read.xlsx2}.
+better performance (an order of magnitude faster on sheets with
+100,000 cells or more).  The result of \code{read.xlsx2} will in
+general be different from \code{read.xlsx}, because internally
+\code{read.xlsx2} uses \code{readColumns} which is tailored for tabular
+data.  
 
 }
 \value{
@@ -91,9 +87,8 @@ approach in \code{read.xlsx2}.
 }
 \author{ Adrian Dragulescu }
 \seealso{\code{\link{write.xlsx}} for writing \code{xlsx} documents.
-  See also \code{\link{saveWorkbook}} for reading a workbook into R for
-  further processing and \code{\link{saveWorkbook}} for saving a
-  workbook to file.}
+  See also \code{\link{readColumns}} for reading only a set of columns
+  into R.}
 \examples{
 \dontrun{
 
@@ -115,7 +110,7 @@ head(res)
 # For Dates, use a conversion like:
 #   as.Date(x-25569, origin="1970-01-01") 
 
-res2 <- read.xlsx2(file, 1)  # all columns returned characters
+res2 <- read.xlsx2(file, 1)  
 
 }
 }

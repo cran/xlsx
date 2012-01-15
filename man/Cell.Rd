@@ -88,7 +88,11 @@ cells <- getCells(rows)   # returns all non empty cells
 values <- lapply(cells, getCellValue) # extract the values
 
 # get a matrix of elements (converted to character)
- vv <- getMatrixValues(sheet, 2:3, 1:3)
+vv <- getMatrixValues(sheet, 2:3, 1:3)
+
+# write the months of the year in the first column of the spreadsheet
+ind <- paste(2:13, ".2", sep="")
+mapply(setCellValue, cells[ind], month.name)
 
 
 }

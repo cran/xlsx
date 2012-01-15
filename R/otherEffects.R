@@ -1,6 +1,50 @@
+# addHyperlink
+# addMergedRegion
+# autoSizeColumn
+# createFreezePane
+# createSplitPane
+# removeMergedRegion
+# setColumnWidth
+# setPrintArea
+# setZoom
+#
+#
 
 ######################################################################
-# 
+# Add hyperlink
+#
+addHyperlink <- function(cell, address, linkType=c("URL", "DOCUMENT",
+  "EMAIL", "FILE"), hyperlinkStyle=NULL)
+{
+  linkType <- match.arg(linkType)
+  
+  sh <- .jcall(cell, "Lorg/apache/poi/ss/usermodel/Sheet;", "getSheet")
+  wb <- .jcall(sh, "Lorg/apache/poi/ss/usermodel/Workbook;", "getWorkbook")
+
+  if (is.null(hyperlinkStyle)) {
+    # create a cell style for hyperlinks
+    hyperFont <- Font(wb, color="blue", underline=1)
+    hyperlinkStyle <- CellStyle(wb) +  hyperFont
+  }
+
+  # create the link
+  creationHelper <- .jcall(wb, "Lorg/apache/poi/ss/usermodel/CreationHelper;",
+                           "getCreationHelper")
+  type <- switch(linkType, URL=1L, DOCUMENT=2L, EMAIL=3L, FILE=4L)
+  link <- .jcall(creationHelper, "Lorg/apache/poi/ss/usermodel/Hyperlink;",
+    "createHyperlink", type)
+  .jcall(link, "V", "setAddress", address)
+
+  # add the link to the cell and set the cell style
+  .jcall(cell, "V", "setHyperlink", link)
+  setCellStyle(cell, hyperlinkStyle)
+
+  invisible()
+}
+
+
+######################################################################
+# Merge regions 
 #
 addMergedRegion <- function(sheet, startRow, endRow, startColumn,
   endColumn)
@@ -25,7 +69,6 @@ autoSizeColumn <- function(sheet, colIndex)
 {
   for (ic in (colIndex-1))
     .jcall(sheet, "V", "autoSizeColumn", as.integer(ic), TRUE)
-  
     
   invisible()  
 }
@@ -63,6 +106,18 @@ createSplitPane <- function(sheet, xSplitPos=2000, ySplitPos=2000,
   invisible()  
 }
 
+
+######################################################################
+# 
+#
+setColumnWidth <- function(sheet, colIndex, colWidth)
+{
+  for (ic in (colIndex - 1))
+   .jcall(sheet, "V", "setColumnWidth", as.integer(ic),
+          as.integer(colWidth*256))
+   
+ invisible()
+}
 
 
 ######################################################################

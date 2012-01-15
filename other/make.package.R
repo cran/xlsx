@@ -31,6 +31,7 @@
 #
 .move.java.classes <- function(do=TRUE)
 {
+  wd <- getwd()
   if (do){
     setwd(javadir)
 
@@ -42,12 +43,13 @@
    unlink("RInterface.jar")
    setwd("..")
 
-   # move the source files to have for reference ... 
-   file.copy("src/dev/RInterface.java", paste(pkgdir, 
-     "other/RInterface.java", sep=""), overwrite=TRUE)
-   file.copy("src/tests/TestRInterface.java", paste(pkgdir, 
-     "other/TestRInterface.java", sep=""), overwrite=TRUE)
+   ## # move the source files to have for reference ... 
+   ## file.copy("src/dev/RInterface.java", paste(pkgdir, 
+   ##   "other/RInterface.java", sep=""), overwrite=TRUE)
+   ## file.copy("src/tests/TestRInterface.java", paste(pkgdir, 
+   ##   "other/TestRInterface.java", sep=""), overwrite=TRUE)
   }
+  setwd(wd)
   invisible()
 }
 
@@ -55,21 +57,25 @@
 #
 .setEnv <- function(computer=c("HOME", "LAPTOP", "WORK"))
 {
-  if (computer=="WORK"){
+  if (computer=="WORK") {
     pkgdir  <<- "H:/user/R/Adrian/findataweb/temp/xlsx/trunk/"
     outdir  <<- "H:/"
     Rcmd    <<- "S:/All/Risk/Software/R/R-2.12.1/bin/i386/Rcmd"
     javadir <<- "C:/Documents and Settings/e47187/workspace/xlsx/"
-  } else if (computer == "LAPTOP"){
-    pkgdir    <<- "C:/Users/adrian/R/findataweb/temp/xlsx/trunk/"
-    outdir    <<- "C:/"
-    Rcmd      <<- '"C:/Program Files/R/R-2.12.1/bin/i386/Rcmd"'
-    javadir   <<- "C:/Users/home/workspace/xlsx/"
-    rforgedir <<- "C:/Users/adrian/R/R-Forge/xlsx/"
-  } else if (computer == "WORK2"){
-    pkgdir  <<- "H:/user/R/Adrian/findataweb/temp/xlsx/trunk/"
+  } else if (computer == "LAPTOP") {
+    pkgdir    <<- "/home/adrian/Documents/rexcel/trunk/"
+    outdir    <<- "/tmp/"
+    Rcmd      <<- "R CMD"
+    javadir   <<- "/home/adrian/workspace/xlsx/"
+  } else if (computer == "HOME") {
+    pkgdir    <<- "/home/adrian/Documents/rexcel/trunk/"
+    outdir    <<- "/tmp"
+    Rcmd      <<- "R CMD"
+    javadir   <<- "/home/adrian/workspace/xlsx/"
+  } else if (computer == "WORK2") {  
+    pkgdir  <<- "C:/google/rexcel/trunk/"
     outdir  <<- "H:/"
-    Rcmd    <<- '"C:/Program Files/R/R-2.12.2/bin/i386/Rcmd"'
+    Rcmd    <<- '"C:/Program Files/R/R-2.14.1/bin/i386/Rcmd"'
     javadir <<- "C:/Documents and Settings/e47187/workspace/xlsx/"
   } else {
   }
@@ -81,9 +87,9 @@
 ##################################################################
 
 #version <- NULL        # keep increasing the minor
-version <- "0.3.0"     # if you want to set it by hand
+version <- "0.4.0"      # if you want to set it by hand
 
-.setEnv("WORK")   # "WORK" "LAPTOP"
+.setEnv("WORK2")   # "HOME" "WORK2" "LAPTOP"
 
 .move.java.classes(TRUE)  # move java classes
 
@@ -92,11 +98,13 @@ version <- .update.DESCRIPTION(pkgdir, version)
 
 # make the package
 setwd(outdir)
-cmd <- paste(Rcmd, "build --force --binary --no-vignette", pkgdir)
+cmd <- paste(Rcmd, "build --force", pkgdir)
 print(cmd)
+
 system(cmd)
 
-install.packages(paste(outdir, "xlsx_",version,".zip", sep=""), repos=NULL)
+install.packages(paste("xlsx_",version, ".tar.gz", sep=""), repos=NULL,
+  type="source")
 
 
 # do you pass all my tests?! Open another R session ... 

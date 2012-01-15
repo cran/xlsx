@@ -1,8 +1,21 @@
 ######################################################################
+# Deal with Fonts
+is.Font <- function(x) inherits(x, "Font")
+
+
+######################################################################
+# 
+createFont <- function(...) {
+  warning("DEPRECATED.  Use Font.  To be removed in version 0.5.0.")
+  Font(...)
+}
+
+
+######################################################################
 # Create a Font.  It needs a workbook object!
 #  - color is an R color string.
 #
-createFont <- function(wb, color=NULL, fontHeightInPoints=NULL, fontName=NULL,
+Font <- function(wb, color=NULL, heightInPoints=NULL, name=NULL,
   isItalic=FALSE, isStrikeout=FALSE, isBold=FALSE, underline=NULL,
   boldweight=NULL) # , setFamily=NULL
 {
@@ -14,14 +27,14 @@ createFont <- function(wb, color=NULL, fontHeightInPoints=NULL, fontName=NULL,
       .jcall(font, "V", "setColor", .xssfcolor(color))   
     } else {
       .jcall(font, "V", "setColor",
-        .jshort(xlsx:::.INDEXED_COLORS[toupper(color)]))
+        .jshort(INDEXED_COLORS_[toupper(color)]))
     }
       
-  if (!is.null(fontHeightInPoints))
-    .jcall(font, "V", "setFontHeightInPoints", .jshort(fontHeightInPoints))
+  if (!is.null(heightInPoints))
+    .jcall(font, "V", "setFontHeightInPoints", .jshort(heightInPoints))
 
-  if (!is.null(fontName))
-    .jcall(font, "V", "setFontName", fontName)
+  if (!is.null(name))
+    .jcall(font, "V", "setFontName", name)
 
   if (isItalic)
     .jcall(font, "V", "setItalic", TRUE)
@@ -32,9 +45,11 @@ createFont <- function(wb, color=NULL, fontHeightInPoints=NULL, fontName=NULL,
   if (isBold & grepl("XSSF", wb$getClass()$getName()))
     .jcall(font, "V", "setBold", TRUE)
 
+  if (!is.null(underline))
+    .jcall(font, "V", "setUnderline", .jbyte(underline))
+  
   if (!is.null(boldweight))
     .jcall(font, "V", "setBoldweigth", .jshort(boldweight))
 
-  
-  font
+   structure(list(ref=font), class="Font") 
 }

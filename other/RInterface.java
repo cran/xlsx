@@ -2,6 +2,7 @@ package dev;
 
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
@@ -10,8 +11,7 @@ public class RInterface {
   public int NCOLS = 0;
   public int NROWS = 0;
   public Cell[][] CELL_ARRAY;
-  
-  
+    
    /*
     * Make rows, and cells.
     */
@@ -26,7 +26,8 @@ public class RInterface {
        } 
      } 
    }
- 
+    
+   
    /*
     * Read a column of doubles from the sheet.  If the cell is not a Number show a NaN!
     */
@@ -145,16 +146,35 @@ public class RInterface {
    }
    
    
+   /*
+    * Write a column of doubles to the sheet.  Use for Dates, DateTimes... 
+    */
+   public void writeColDoubles(Sheet sheet, int startRowIndex, int startColIndex, 
+     double[] data, boolean showNaN, CellStyle cellStyle){
+		     
+	 int N = data.length;  
+	 for (int i=0; i<N; i++) {
+       if (!(showNaN && data[i]==Double.NaN)) {   
+	     CELL_ARRAY[startRowIndex+i][startColIndex].setCellValue(data[i]);
+	     CELL_ARRAY[startRowIndex+i][startColIndex].setCellStyle(cellStyle);
+       }
+	 }     
+   }
   
+   
    /*
     * Write a column of doubles to the sheet.
     */
    public void writeColDoubles(Sheet sheet, int startRowIndex, int startColIndex, 
-     double[] data){
+     double[] data, boolean showNaN){
      
      int N = data.length;  
      for (int i=0; i<N; i++) {
-       CELL_ARRAY[startRowIndex+i][startColIndex].setCellValue(data[i]);
+       if (!showNaN && Double.isNaN(data[i])) {
+         CELL_ARRAY[startRowIndex+i][startColIndex].setCellType(3);
+       } else {
+         CELL_ARRAY[startRowIndex+i][startColIndex].setCellValue(data[i]);
+       }
      }     
    }
 
@@ -162,13 +182,32 @@ public class RInterface {
     * Write a column of ints to the sheet.
     */
    public void writeColInts(Sheet sheet, int startRowIndex, int startColIndex, 
-     int[] data){
+     int[] data, boolean showNA){
      
      int N = data.length;  
      for (int i=0; i<N; i++) {
-       CELL_ARRAY[startRowIndex+i][startColIndex].setCellValue(data[i]);
+       if (!showNA && data[i]==-2147483648) {
+         CELL_ARRAY[startRowIndex+i][startColIndex].setCellType(3);
+       } else {
+         CELL_ARRAY[startRowIndex+i][startColIndex].setCellValue(data[i]);
+       }
      }     
    }  
+
+   public void writeColInts(Sheet sheet, int startRowIndex, int startColIndex, 
+     int[] data, boolean showNA, CellStyle cellStyle){
+		     
+     int N = data.length;  
+     for (int i=0; i<N; i++) {
+       if (!showNA && data[i]==-2147483648) {
+         CELL_ARRAY[startRowIndex+i][startColIndex].setCellType(3);
+       } else {
+         CELL_ARRAY[startRowIndex+i][startColIndex].setCellValue(data[i]);
+         CELL_ARRAY[startRowIndex+i][startColIndex].setCellStyle(cellStyle);
+       }
+     }     
+   }  
+
    
    /*
     * Write a column of strings to the sheet.
@@ -179,6 +218,16 @@ public class RInterface {
      int N = data.length;  
      for (int i=0; i<N; i++) {
        CELL_ARRAY[startRowIndex+i][startColIndex].setCellValue(data[i]);
+     }     
+   }
+   
+   public void writeColStrings(Sheet sheet, int startRowIndex, int startColIndex, 
+     String[] data, CellStyle cellStyle){
+		     
+     int N = data.length;  
+     for (int i=0; i<N; i++) {
+       CELL_ARRAY[startRowIndex+i][startColIndex].setCellValue(data[i]);
+       CELL_ARRAY[startRowIndex+i][startColIndex].setCellStyle(cellStyle);       
      }     
    }
 
@@ -193,6 +242,17 @@ public class RInterface {
        CELL_ARRAY[startRowIndex][startColIndex+j].setCellValue(data[j]);
      }     
    }
+   
+   public void writeRowStrings(Sheet sheet, int startRowIndex, int startColIndex, 
+     String[] data, CellStyle cellStyle){
+		     
+     int N = data.length;  
+     for (int j=0; j<N; j++) {
+       CELL_ARRAY[startRowIndex][startColIndex+j].setCellValue(data[j]);
+       CELL_ARRAY[startRowIndex][startColIndex+j].setCellStyle(cellStyle);       
+     }     
+   }
+
    
    
 }
