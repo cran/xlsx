@@ -1,5 +1,6 @@
 # test the package
 #
+# test.addOnExistingWorkbook
 # test.addDataFrame
 # test.basicFunctions
 # test.cellStyles
@@ -15,6 +16,26 @@
 
 
 #####################################################################
+# Test adding a df to an existing workbook using addDataFrame 
+# 
+test.addOnExistingWorkbook <- function(ext="xlsx")
+{
+  cat("Test adding a df to an existing workbook ... ")
+
+  src <- system.file("tests", paste("test_import.", ext, sep=""),
+                     package="xlsx")
+  wb  <- loadWorkbook( src )
+  sheets <- getSheets( wb )
+
+  dat <- data.frame(a=LETTERS, b=1:26)
+
+  addDataFrame(dat, sheets$mixedTypes, startColumn=20, startRow=5)
+  #saveWorkbook(wb, paste(OUTDIR, "addOnExistingWorkbook.xlsx", sep=""))
+  
+  cat("Done.\n")
+}
+
+#####################################################################
 # Test add 
 # 
 test.addDataFrame <- function(wb)
@@ -22,8 +43,8 @@ test.addDataFrame <- function(wb)
   cat("Testing addDataFrame ... ")
   
   cat("  custom styles\n")
-  sheet  <- createSheet(wb, sheetName="addDataFrame1")
-  data <- data.frame(mon=month.abb[1:10], day=1:10, year=2000:2009,
+  sheet <- createSheet(wb, sheetName="addDataFrame1")
+  data0 <- data.frame(mon=month.abb[1:10], day=1:10, year=2000:2009,
     date=seq(as.Date("1999-01-01"), by="1 year", length.out=10),
     bool=ifelse(1:10 %% 2, TRUE, FALSE), log=log(1:10),
     rnorm=10000*rnorm(10),
@@ -32,7 +53,7 @@ test.addDataFrame <- function(wb)
   cs1 <- CellStyle(wb) + Font(wb, isItalic=TRUE)
   cs2 <- CellStyle(wb) + Font(wb, color="blue")
   cs3 <- CellStyle(wb) + Font(wb, isBold=TRUE) + Border()
-  addDataFrame(data, sheet, startRow=3, startColumn=2, colnamesStyle=cs3,
+  addDataFrame(data0, sheet, startRow=3, startColumn=2, colnamesStyle=cs3,
     rownamesStyle=cs1, colStyle=list(`2`=cs2, `3`=cs2))
 
   cat("  NA treatment, with defaults\n")
@@ -49,6 +70,16 @@ test.addDataFrame <- function(wb)
   data$mon[12] <- "showNA=TRUE, characterNA=NotAvailable"
   addDataFrame(data, sheet3, row.names=FALSE, showNA=TRUE,
     characterNA="NotAvailable")
+  row <- getRows(sheet3, 1)
+  cells <- getCells(row)
+  c1.10 <- createCell(row, 10)
+  setCellValue(c1.10[[1,1]], "rbind and cbind some df with addDataFrame")
+  
+  cat("  stack another data.frame on a sheet\n")
+  addDataFrame(data0, sheet3, startRow=17, startColumn=5)
+
+  cat("  put another data.frame on a sheet side by side\n")
+  addDataFrame(data0, sheet3, startRow=17, startColumn=17)
   
   cat("Done.\n")
 }
@@ -353,7 +384,6 @@ test.ranges <- function(wb)
   stopifnot(all.equal(which(is.na(res)), c(6,28,29,59,69))) 
 
   cat("Test read.xlsx2 ... \n")
-  source(paste(SOURCEDIR, "rexcel/trunk/R/read.xlsx2.R", sep=""))
   res <- read.xlsx2(file, sheetName="all", startRow=3)
   
   cat("  read more columns than on the spreadsheet")
@@ -514,11 +544,13 @@ test.ranges <- function(wb)
   source(thisFile)
 
   test.basicFunctions(ext="xlsx")
+  test.addOnExistingWorkbook(ext="xlsx")
   .main_lowlevel_export(ext="xlsx")  
   .main_highlevel_export(ext="xlsx")
 #  .main_speedtest_export(ext="xlsx")
   
   test.basicFunctions(ext="xls")
+  test.addOnExistingWorkbook(ext="xls")
   .main_lowlevel_export(ext="xls")  
   .main_highlevel_export(ext="xls")
 #  .main_speedtest_export(ext="xls")
