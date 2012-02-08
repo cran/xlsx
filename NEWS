@@ -1,5 +1,13 @@
 NEWS for package xlsx
 
+Changes in version 0.4.2 (released 2012-02-08)
+
+ o New function readRows() similar to readColumns() for reading
+   accross the columns. 
+
+ o Removed a stray browser() in function .guess_cell_type
+
+
 Changes in version 0.4.1 (released 2012-01-22)
 
  o Added a test for file existence in loadWorkbook.  If file does not
