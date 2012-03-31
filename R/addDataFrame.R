@@ -13,7 +13,7 @@ addDataFrame <- function(x, sheet, col.names=TRUE, row.names=TRUE,
   if (!is.data.frame(x))
     x <- data.frame(x)    # just because the error message is too ugly
 
-  if (row.names) {        # add rownames to data x                   
+  if (row.names) {        # add rownames to data x as the first column
     x <- cbind(rownames=rownames(x), x)
     if (!is.null(colStyle))
       names(colStyle) <- as.numeric(names(colStyle)) + 1
@@ -26,20 +26,24 @@ addDataFrame <- function(x, sheet, col.names=TRUE, row.names=TRUE,
   if ("POSIXct" %in% classes) 
     csDateTime <- CellStyle(wb) + DataFormat("m/d/yyyy h:mm:ss;@")
 
+  # offset required to give space for column names
+  # (either excel columns if byrow=TRUE or rows if byrow=FALSE)
   iOffset <- if (col.names) 1L else 0L
+  # offset required to give space for row names
+  # (either excel rows if byrow=TRUE or columns if byrow=FALSE)
   jOffset <- if (row.names) 1L else 0L
 
   if ( byrow ) {
       # write data.frame columns data row-wise
       setDataMethod   <- "setRowData"
       setHeaderMethod <- "setColData"
-      blockRows <- ncol(x) + iOffset
-      blockCols <- nrow(x)
+      blockRows <- ncol(x)
+      blockCols <- nrow(x) + iOffset # row-wise data + column names
   } else {
       # write data.frame columns data column-wise
       setDataMethod   <- "setColData"
       setHeaderMethod <- "setRowData"
-      blockRows <- nrow(x) + iOffset
+      blockRows <- nrow(x) + iOffset # column-wise data + column names
       blockCols <- ncol(x)
   }
 
@@ -57,7 +61,7 @@ addDataFrame <- function(x, sheet, col.names=TRUE, row.names=TRUE,
            .jnull('org/apache/poi/ss/usermodel/CellStyle') )
   }
 
-  # insert one column at a time, and style it if it has style
+  # write one data.frame column at a time, and style it if it has style
   # Dates and POSIXct columns get styled if not overridden. 
   for (j in 1:ncol(x)) {
     thisColStyle <-
@@ -100,6 +104,7 @@ addDataFrame <- function(x, sheet, col.names=TRUE, row.names=TRUE,
          .jnull('org/apache/poi/ss/usermodel/CellStyle') )
   }
 
-  invisible()
+  # return the cellBlock occupied by the generated data frame
+  invisible(cellBlock)
 }
 

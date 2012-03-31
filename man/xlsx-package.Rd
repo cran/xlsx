@@ -28,11 +28,12 @@
   
   A collection of tests that can be used as examples are located 
   in folder \code{/tests/}.  They are a good source of examples of how
-  to use the package. 
+  to use the package.  
 
-  Please see \url{http://code.google.com/p/rexcel/} for Wiki and the
-  development version.  Issues and questions should be reported using
-  the dedicated mailing list 
+  Please see \url{http://code.google.com/p/rexcel/} for a Wiki and the
+  development version.  To report a bug, please use the Issues page at
+  \url{https://code.google.com/p/rexcel/issues/list}.  Questions should
+  be asked on the dedicated mailing list at
   \url{http://groups.google.com/group/R-package-xlsx}.
   
 }
@@ -40,8 +41,8 @@
 \tabular{ll}{
 Package: \tab xlsx\cr
 Type: \tab Package\cr
-Version: \tab 0.5.0\cr
-Date: \tab 2012-09-23\cr
+Version: \tab 0.5.1\cr
+Date: \tab 2012-03-31\cr
 License: \tab GPL-3\cr
 }
 
@@ -61,7 +62,7 @@ Maintainer: Adrian A. Dragulescu <adrian.dragulescu@gmail.com>
   if you are looking for something that is not exposed in R as it may be
   available on the Java side.  Inspecting the source code for some the
   the \R functions in this package can show you how to do it (even if
-  you are Java shy). 
+  you are Java shy.) 
 }
 \keyword{ package }
 \seealso{\code{\link{Workbook}} for ways to work with \code{Workbook}

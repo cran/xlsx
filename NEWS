@@ -1,5 +1,27 @@
 NEWS for package xlsx
 
+Changes in version 0.5.1 (released 2013-03-31)
+
+ o Fix an annoyance with read.xlsx2, so it doesn't return column names
+ of the form c..............  
+
+ o Add a startRow, endRow argument to read.xlsx.  These are
+ convenience arguments for better control.  Also, it brings the
+ function signature closer to that of read.xlsx2.
+ 
+ o A NullPointerException was triggered for read.xlsx when the table
+ due to incorrect indexing of the header columns in certain
+ circumstances.  See Issue 9.
+
+ o Fix an error with readColumns that was affecting read.xlsx2.  By
+ default readColumns was using the max number of rows in the sheet to
+ determine how many rows to read.  If the max number of rows in sheet
+ was greater than the existing number of rows in the column you were
+ reading, you were getting a NullPointerException.  This may happen 
+ for malformed spreadsheets (created by some other proprietary
+ software for example).
+
+
 Changes in version 0.5.0 (released 2012-09-23)
 
  o New functionality: Introduce the concept of CellBlock to allow

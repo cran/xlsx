@@ -57,16 +57,18 @@ getCells <- function(row, colIndex=NULL, simplify=TRUE)
 ######################################################################
 # Only one cell and one value.  
 # You vectorize outside this function if you want.
-# Maybe I do a vectorized function inside java if this one is slow.
 # 
 #    Date    = .jnew("java/text/SimpleDateFormat",
 #      "yyyy-MM-dd")$parse(as.character(value)),     # does not format it!
 #
-setCellValue <- function(cell, value, richTextString=FALSE)
+setCellValue <- function(cell, value, richTextString=FALSE, showNA=TRUE)
 {
-  if (is.na(value)){
-    return(invisible(.jcall(cell, "V", "setCellErrorValue", .jbyte(42))))
+  if (is.na(value)) {
+    if (showNA) {
+      return(invisible(.jcall(cell, "V", "setCellErrorValue", .jbyte(42))))
+    } else { return(invisible()) }
   }
+  
   value <- switch(class(value)[1],
     integer = as.numeric(value),
     numeric = value,              
@@ -91,9 +93,9 @@ getCellValue <- function(cell, keepFormulas=FALSE, encoding="unknown")
 {
   cellType <- .jcall(cell, "I", "getCellType") + 1
   value <- switch(cellType,
-    .jcall(cell, "D", "getNumericCellValue"),        # numeric
+    .jcall(cell, "D", "getNumericCellValue"),        # 1 = numeric
                   
-    {strVal <- .jcall(.jcall(cell,                   # string
+    {strVal <- .jcall(.jcall(cell,                   # 2 = string
       "Lorg/apache/poi/ss/usermodel/RichTextString;",
       "getRichStringCellValue"), "S", "toString");
      if (encoding=="unknown") {strVal} else {Encoding(strVal) <- encoding; strVal}

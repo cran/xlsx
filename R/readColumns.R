@@ -19,7 +19,7 @@ readColumns <- function(sheet, startColumn, endColumn, startRow,
   noColumns <- endColumn - startColumn + 1
 
   Rintf <- .jnew("org/cran/rexcel/RInterface")  # create an interface object 
-  
+
   if (header) {
     cnames <- try(.jcall(Rintf, "[S", "readRowStrings",
       .jcast(sheet, "org/apache/poi/ss/usermodel/Sheet"),
@@ -63,13 +63,15 @@ readColumns <- function(sheet, startColumn, endColumn, startRow,
         as.integer(startRow-1), as.integer(endRow-1), 
         as.integer(startColumn-1+i-1))
     }
+
     if (!is.na(colClasses[i]))
       suppressWarnings(class(aux) <- colClasses[i])  # if it gets specified
     res[[i]] <- aux
   }
   
   if (as.data.frame) {
-    names(res) <- cnames
+    cnames[cnames == ""] <- " " # remove some silly c.......... colnames!
+    names(res) <- cnames  
     res <- data.frame(res, ...)
   }
 

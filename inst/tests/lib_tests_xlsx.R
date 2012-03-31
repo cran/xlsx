@@ -12,10 +12,13 @@
 # test.otherEffects
 # test.picture
 # test.ranges
+# test.Issue9
 #
 # .main_highlevel_export
 # .main_lowlevel_export
 # .main
+
+
 
 
 #####################################################################
@@ -446,6 +449,7 @@ test.ranges <- function(wb)
 }
 
 
+
 #####################################################################
 # Test imports
 # 
@@ -655,8 +659,14 @@ test.ranges <- function(wb)
     "lib_tests_xlsx.R", sep="")
   source(paste(SOURCEDIR, "rexcel/trunk/R/utilities.R", sep=""))
   source(paste(SOURCEDIR, "rexcel/trunk/R/addDataFrame.R", sep=""))
+  source(paste(SOURCEDIR, "rexcel/trunk/R/readColumns.R", sep=""))
+  source(paste(SOURCEDIR, "rexcel/trunk/R/read.xlsx2.R", sep=""))
   source(paste(SOURCEDIR, "rexcel/trunk/R/write.xlsx2.R", sep=""))
   source(thisFile)
+
+
+  source(paste(SOURCEDIR, "rexcel/trunk/inst/tests/lib_test_issues.R", sep=""))
+  .run_test_issues(SOURCEDIR)
 
   
   test.basicFunctions(ext="xlsx")
@@ -676,6 +686,11 @@ test.ranges <- function(wb)
 #  .main_speedtest_export(ext="xls")
  
 
+  allF <- list.files(paste(SOURCEDIR,"rexcel/trunk/R/", sep=""),
+                     full.names=TRUE)
+  lapply(allF, function(fname){cat(fname); source(fname)})
+
+  
 
 }
 
