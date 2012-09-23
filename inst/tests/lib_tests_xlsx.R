@@ -1,11 +1,14 @@
 # test the package
 #
 # test.addOnExistingWorkbook
+# test.evalFormulasOnOpen
 # test.addDataFrame
 # test.basicFunctions
 # test.cellStyles
+# test.cellBlock
 # test.comments
 # test.dataFormats
+# test.evalFormulasOnOpen
 # test.otherEffects
 # test.picture
 # test.ranges
@@ -40,10 +43,10 @@ test.addOnExistingWorkbook <- function(ext="xlsx")
 # 
 test.addDataFrame <- function(wb)
 {
-  cat("Testing addDataFrame ... ")
+  cat("Testing addDataFrame ... \n")
   
   cat("  custom styles\n")
-  sheet <- createSheet(wb, sheetName="addDataFrame1")
+  sheet1 <- createSheet(wb, sheetName="addDataFrame1")
   data0 <- data.frame(mon=month.abb[1:10], day=1:10, year=2000:2009,
     date=seq(as.Date("1999-01-01"), by="1 year", length.out=10),
     bool=ifelse(1:10 %% 2, TRUE, FALSE), log=log(1:10),
@@ -53,9 +56,9 @@ test.addDataFrame <- function(wb)
   cs1 <- CellStyle(wb) + Font(wb, isItalic=TRUE)
   cs2 <- CellStyle(wb) + Font(wb, color="blue")
   cs3 <- CellStyle(wb) + Font(wb, isBold=TRUE) + Border()
-  addDataFrame(data0, sheet, startRow=3, startColumn=2, colnamesStyle=cs3,
+  addDataFrame(data0, sheet1, startRow=3, startColumn=2, colnamesStyle=cs3,
     rownamesStyle=cs1, colStyle=list(`2`=cs2, `3`=cs2))
-
+  
   cat("  NA treatment, with defaults\n")
   sheet2 <- createSheet(wb, sheetName="addDataFrame2")  
   data <- data.frame(mon=month.abb, index=1:12, double=seq(1.23, by=1,
@@ -184,6 +187,86 @@ test.cellStyles <- function(wb)
 }
 
 
+test.cellBlock2 <- function()
+{
+  ext <- "xls"
+  outfile <- paste(OUTDIR, "test_cellBlock.", ext, sep="")
+  if (file.exists(outfile)) unlink(outfile)
+   
+  wb <- createWorkbook(type=ext)
+
+  sheet  <- createSheet(wb, sheetName="CellBlock")
+
+  cat("  Add a cell block to sheet CellBlock")
+  cb <- CellBlock(sheet, 7, 3, 50, 60)
+  CB.setColData(cb, 1:50, 1)    # set a column
+  CB.setRowData(cb, 1:50, 1)     # set a row
+
+  # add a matrix, and style it
+  cs <- CellStyle(wb) + DataFormat("#,##0.00")
+  x  <- matrix(rnorm(40*45), nrow=40)
+  CB.setMatrixData(cb, x, 10, 4, cellStyle=cs)  
+
+  # highlight the negative numbers in red 
+  fill <- Fill(foregroundColor = "red", backgroundColor="red")
+  ind  <- which(x < 0, arr.ind=TRUE)
+  CB.setFill(cb, fill, ind[,1]+9, ind[,2]+3)  # note the indices offset
+
+  source(paste(SOURCEDIR, "rexcel/trunk/R/CellBlock.R", sep=""))
+  
+  # set the border on the top row of the Cell Block
+  border <-  Border(color="blue", position=c("TOP", "BOTTOM"),
+    pen=c("BORDER_THIN", "BORDER_THICK"))
+  CB.setBorder(cb, border, 1:50, 1)
+
+  saveWorkbook(wb, outfile)  
+  cat("Wrote file", outfile, "\n\n")
+}
+
+
+
+#####################################################################
+# Test CellBlock
+# 
+test.cellBlock <- function(wb)
+{
+  cat("Testing the CellBlock functionality ...\n")
+  sheet  <- createSheet(wb, sheetName="CellBlock")
+
+  cat("  Add a cell block to sheet CellBlock\n")
+  cb <- CellBlock(sheet, 7, 3, 1000, 60)
+  CB.setColData(cb, 1:100, 1)    # set a column
+  CB.setRowData(cb, 1:50, 1)     # set a row
+
+  # add a matrix, and style it
+  cs <- CellStyle(wb) + DataFormat("#,##0.00")
+  x  <- matrix(rnorm(900*45), nrow=900)
+  CB.setMatrixData(cb, x, 10, 4, cellStyle=cs)  
+
+  # highlight the negative numbers in red 
+  fill <- Fill(foregroundColor = "red", backgroundColor="red")
+  ind  <- which(x < 0, arr.ind=TRUE)
+  CB.setFill(cb, fill, ind[,1]+9, ind[,2]+3)  # note the indices offset
+
+  # set the border on the top row of the Cell Block
+  border <-  Border(color="blue", position=c("TOP", "BOTTOM"),
+    pen=c("BORDER_THIN", "BORDER_THICK"))
+  CB.setBorder(cb, border, 1:1000, 1)
+
+  cat("  Modify the cell styles of existing cells on sheet dataFormats\n")
+  sheets <- getSheets(wb)
+  sheet  <- sheets[["dataFormats"]]
+  cb <- CellBlock(sheet, 1, 1, 5, 5, create=FALSE)
+  font <- Font(wb, color="red", isItalic=TRUE)
+  CB.setBorder(cb, border, 1:5, 1)
+  ind <- expand.grid(1:5, 1:5)
+  CB.setFont(cb, font, ind[,1], ind[,2])
+
+  
+  cat("Done.\n")
+}
+
+
 #####################################################################
 # Test comments
 # 
@@ -252,6 +335,29 @@ test.dataFormats <- function(wb)
   cat("Done.\n")
 }
 
+#####################################################################
+# Test other effects
+# 
+test.evalFormulasOnOpen <- function()
+{
+  require(xlsx)
+  filename <- "C:/Temp/formulaRevalueOnOpen.xlsx"
+  wb <- loadWorkbook(filename)
+  sheets <- getSheets(wb)
+
+  sheet <- sheets[[1]]
+  rows <- getRows(sheet)
+  cells <- getCells(rows)
+
+  setCellValue(cells[["2.1"]], 2)
+
+  #wb$getCreationHelper()$createFormulaEvaluator()$evaluateAll()
+  
+  wb$setForceFormulaRecalculation(TRUE)
+  
+  saveWorkbook(wb, "C:/temp/junk.xlsx")
+  
+}
 
 #####################################################################
 # Test other effects
@@ -339,26 +445,6 @@ test.ranges <- function(wb)
   cat("Done.\n")
 }
 
-#####################################################################
-# Test mixture.  You cannot convert one hssf to xssf on the fly. 
-# 
-## test.mixtureHSSFXSSF <- function(wb)
-## {
-##   cat("Test mixture of HSSF and XSSF")
-  
-##   fname <- "test_import.xls"
-##   file <- paste(SOURCEDIR, "rexcel/trunk/inst/tests/", fname, sep="")
-
-##   wb <- loadWorkbook(file)
-##   sheets <- getSheets(wb)
-
-##   sheet <- sheets[["all"]]
-
-##   wb2 <- .jcast(wb, "org/apache/poi/ss/usermodel/Workbook")
-
-##   saveWorkbook(wb2, paste(OUTDIR, "modify_existing_hssf.xlsx", sep=""))  
-## }
-
 
 #####################################################################
 # Test imports
@@ -442,7 +528,8 @@ test.ranges <- function(wb)
   file <- paste(OUTDIR, "test_highlevel_export.", ext, sep="")
   cat("  write an xlsx file with char, int, double, date, bool columns ...\n")
   write.xlsx(x, file, sheetName="writexlsx")
-  write.xlsx2(x, file, sheetName="writexlsx2", append=TRUE)
+  
+  write.xlsx2(x, file, sheetName="writexlsx2", append=TRUE, row.names=FALSE) 
 
   cat("  test the append argument by adding another sheet ... \n")
   file <- paste(OUTDIR, "test_highlevel_export.", ext, sep="")
@@ -518,6 +605,8 @@ test.ranges <- function(wb)
   test.picture(wb)
   test.addDataFrame(wb)
   #test.pageBreaks(wb)    # not working with 3.7, fixed in 3.8
+  test.cellBlock(wb)
+  
   
   saveWorkbook(wb, outfile)
   
@@ -564,27 +653,36 @@ test.ranges <- function(wb)
   }
   thisFile <- paste(SOURCEDIR, "rexcel/trunk/inst/tests/",
     "lib_tests_xlsx.R", sep="")
+  source(paste(SOURCEDIR, "rexcel/trunk/R/utilities.R", sep=""))
+  source(paste(SOURCEDIR, "rexcel/trunk/R/addDataFrame.R", sep=""))
+  source(paste(SOURCEDIR, "rexcel/trunk/R/write.xlsx2.R", sep=""))
   source(thisFile)
 
+  
   test.basicFunctions(ext="xlsx")
-  test.addOnExistingWorkbook(ext="xlsx")
-  .main_lowlevel_export(ext="xlsx")  
+  test.addOnExistingWorkbook(ext="xlsx")  
+  .main_lowlevel_export(ext="xlsx")
   .main_highlevel_export(ext="xlsx")
+  .main_highlevel_import(ext="xlsx")
+  .main_lowlevel_import(ext="xlsx")  # readColumns, readRows
 #  .main_speedtest_export(ext="xlsx")
   
   test.basicFunctions(ext="xls")
   test.addOnExistingWorkbook(ext="xls")
   .main_lowlevel_export(ext="xls")  
-  .main_highlevel_export(ext="xls")
-#  .main_speedtest_export(ext="xls")
- 
-  .main_highlevel_import(ext="xlsx")
-  .main_lowlevel_import(ext="xlsx")  # readColumns, readRows
-
+  .main_highlevel_export(ext="xls")  
   .main_highlevel_import(ext="xls")
   .main_lowlevel_import(ext="xls")
-  
+#  .main_speedtest_export(ext="xls")
+ 
+
+
 }
+
+
+
+
+
 
 
 
@@ -651,6 +749,26 @@ test.ranges <- function(wb)
 
 
 
+
+#####################################################################
+# Test mixture.  You cannot convert one hssf to xssf on the fly. 
+# 
+## test.mixtureHSSFXSSF <- function(wb)
+## {
+##   cat("Test mixture of HSSF and XSSF")
+  
+##   fname <- "test_import.xls"
+##   file <- paste(SOURCEDIR, "rexcel/trunk/inst/tests/", fname, sep="")
+
+##   wb <- loadWorkbook(file)
+##   sheets <- getSheets(wb)
+
+##   sheet <- sheets[["all"]]
+
+##   wb2 <- .jcast(wb, "org/apache/poi/ss/usermodel/Workbook")
+
+##   saveWorkbook(wb2, paste(OUTDIR, "modify_existing_hssf.xlsx", sep=""))  
+## }
 
 
 

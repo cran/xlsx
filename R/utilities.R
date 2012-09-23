@@ -1,6 +1,7 @@
 # .guess_cell_type
 # .onLoad
 # .splitBlocks
+# .hssfcolor
 # .xssfcolor  
 
 
@@ -51,12 +52,21 @@
 
 ####################################################################
 #
-.onLoad <- function(libname, pkgname)
-{
-  #require(rJava)
+.onLoad <- function(libname, pkgname){}
 
-  
+####################################################################
+# Converts R color into Excel compatible color
+# rcolor <- c("red", "blue")
+#
+.Rcolor2XLcolor <- function( rcolor, isXSSF=TRUE )
+{
+  if ( isXSSF ) {
+    sapply( rcolor, .xssfcolor )
+  } else {                     
+    sapply( rcolor, .hssfcolor ) 
+  }    
 }
+
 
 ###################################################################
 # split a vector into contiguous chunks c(1,2,3, 6,7, 9,10,11)
@@ -78,6 +88,16 @@
   }
 
   blocks
+}
+
+
+########################################################################
+# take an R color and return an HSSFColor object
+# where Rcolor is a string
+# not all colors are supported
+.hssfcolor <- function(Rcolor)
+{
+  .jshort(INDEXED_COLORS_[toupper( Rcolor )])
 }
 
 

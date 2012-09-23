@@ -15,8 +15,7 @@ read.xlsx2(file, sheetIndex, sheetName=NULL, startRow=1,
   colClasses="character", ...)
 }
 \arguments{ 
-  \item{file}{the \emph{absolute} path to the file which the data are to
-    be read from.}
+  \item{file}{the path to the file to read.}
   \item{sheetIndex}{a number representing the sheet index in the workbook.}
   \item{sheetName}{a character string with the sheet name.}
   \item{rowIndex}{a numeric vector indicating the rows you want to
@@ -32,9 +31,7 @@ read.xlsx2(file, sheetIndex, sheetName=NULL, startRow=1,
   \item{colClasses}{For \code{read.xlsx} a character vector that
 	represent the class of each column.  Recycled as necessary, or if
 	the character vector is named, unspecified values are taken to be
-	\code{NA}.  For \code{read.xlsx2} A character vector, recycled if
-	necessary.  Only \code{numeric} and \code{character} values are
-	allowed. }
+	\code{NA}.  For \code{read.xlsx2} see \code{\link{readColumns}}.}
   \item{keepFormulas}{a logical value indicating if Excel formulas
     should be shown as text in \R and not evaluated before bringing them
     in.}

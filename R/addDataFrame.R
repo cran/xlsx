@@ -8,11 +8,11 @@
 #
 addDataFrame <- function(x, sheet, col.names=TRUE, row.names=TRUE,
   startRow=1, startColumn=1, colStyle=NULL, colnamesStyle=NULL,
-  rownamesStyle=NULL, showNA=FALSE, characterNA="")
+  rownamesStyle=NULL, showNA=FALSE, characterNA="", byrow=FALSE)
 {
   if (!is.data.frame(x))
     x <- data.frame(x)    # just because the error message is too ugly
-  
+
   if (row.names) {        # add rownames to data x                   
     x <- cbind(rownames=rownames(x), x)
     if (!is.null(colStyle))
@@ -22,31 +22,41 @@ addDataFrame <- function(x, sheet, col.names=TRUE, row.names=TRUE,
   wb <- sheet$getWorkbook()
   classes <- unlist(sapply(x, class))
   if ("Date" %in% classes) 
-   csDate <- CellStyle(wb) + DataFormat("m/d/yyyy")
+    csDate <- CellStyle(wb) + DataFormat("m/d/yyyy")
   if ("POSIXct" %in% classes) 
-   csDateTime <- CellStyle(wb) + DataFormat("m/d/yyyy h:mm:ss;@")
+    csDateTime <- CellStyle(wb) + DataFormat("m/d/yyyy h:mm:ss;@")
 
   iOffset <- if (col.names) 1L else 0L
   jOffset <- if (row.names) 1L else 0L
-  indX1   <- as.integer(startRow-1)        # index of top row
-  indY1   <- as.integer(startColumn-1)     # index of top column
-  
-  # create a new interface object 
-  Rintf <- .jnew("dev/RInterface")
-  Rintf$NCOLS <- ncol(x) + jOffset   # set the number of columns
-  Rintf$NROWS <- nrow(x) + iOffset   # set the number of rows
 
-  # create the cells in Rint$CELL_ARRAY
-  Rintf$createCells(sheet, indX1, indY1)
-  
-  if (col.names) {                   # insert colnames
-    aux <- if (jOffset) .jarray(names(x)[-1]) else .jarray(names(x))
-    if (!is.null(colnamesStyle)) {   
-      Rintf$writeRowStrings(sheet, 0L, jOffset, aux, colnamesStyle$ref) 
-    } else {
-      Rintf$writeRowStrings(sheet, 0L, jOffset, aux)
-    }
+  if ( byrow ) {
+      # write data.frame columns data row-wise
+      setDataMethod   <- "setRowData"
+      setHeaderMethod <- "setColData"
+      blockRows <- ncol(x) + iOffset
+      blockCols <- nrow(x)
+  } else {
+      # write data.frame columns data column-wise
+      setDataMethod   <- "setColData"
+      setHeaderMethod <- "setRowData"
+      blockRows <- nrow(x) + iOffset
+      blockCols <- ncol(x)
   }
+
+  # create a CellBlock, not sure why the usual .jnew doesn't work
+  cellBlock <- CellBlock( sheet,
+           as.integer(startRow), as.integer(startColumn),
+           as.integer(blockRows), as.integer(blockCols),
+           TRUE)
+
+  # insert colnames
+  if (col.names) {
+    .jcall( cellBlock$ref, "V", setHeaderMethod, 0L, jOffset,
+       .jarray(colnames(x)[(1+jOffset):ncol(x)]), showNA,
+       if ( !is.null(colnamesStyle) ) colnamesStyle$ref else
+           .jnull('org/apache/poi/ss/usermodel/CellStyle') )
+  }
+
   # insert one column at a time, and style it if it has style
   # Dates and POSIXct columns get styled if not overridden. 
   for (j in 1:ncol(x)) {
@@ -62,17 +72,10 @@ addDataFrame <- function(x, sheet, col.names=TRUE, row.names=TRUE,
       } else {
         NULL
       }
-#browser()
+
     xj <- x[,j]
     if ("integer" %in% class(xj)) {
-      if (is.null(thisColStyle)) {
-        Rintf$writeColInts(sheet, iOffset, as.integer(j-1),
-          .jarray(xj), showNA)
-      } else {
-        Rintf$writeColInts(sheet, iOffset, as.integer(j-1),
-          .jarray(xj), showNA, thisColStyle$ref)
-      }
-      
+      aux <- xj
     } else if (any(c("numeric", "Date", "POSIXt") %in% class(xj))) {
       aux <- if ("Date" %in% class(xj)) {
           as.numeric(xj)+25569
@@ -84,28 +87,19 @@ addDataFrame <- function(x, sheet, col.names=TRUE, row.names=TRUE,
       haveNA <- is.na(aux)
       if (any(haveNA))
         aux[haveNA] <- NaN          # encode the numeric NAs as NaN for java
-      if (is.null(thisColStyle)) {
-        Rintf$writeColDoubles(sheet, iOffset, as.integer(j-1),
-           .jarray(aux), showNA)
-      } else {
-        Rintf$writeColDoubles(sheet, iOffset, as.integer(j-1),
-           .jarray(aux), showNA, thisColStyle$ref)
-      }
-      
     } else {
       aux <- as.character(x[,j])
       haveNA <- is.na(aux)
       if (any(haveNA))
         aux[haveNA] <- characterNA
-      if (is.null(thisColStyle)) {
-        Rintf$writeColStrings(sheet, iOffset, as.integer(j-1),
-           .jarray(aux))
-      } else {
-        Rintf$writeColStrings(sheet, iOffset, as.integer(j-1),
-           .jarray(aux), thisColStyle$ref)
-      }      
     }
+#browser()
+   .jcall( cellBlock$ref, "V", setDataMethod,
+     as.integer(j-1L), iOffset, .jarray(aux), showNA, 
+       if ( !is.null(thisColStyle) ) thisColStyle$ref else
+         .jnull('org/apache/poi/ss/usermodel/CellStyle') )
   }
-  
+
   invisible()
 }
+

@@ -9,7 +9,7 @@
 
 addDataFrame(x, sheet, col.names=TRUE, row.names=TRUE,
   startRow=1, startColumn=1, colStyle=NULL, colnamesStyle=NULL,
-  rownamesStyle=NULL, showNA=FALSE, characterNA="")
+  rownamesStyle=NULL, showNA=FALSE, characterNA="", byrow=FALSE)
 
 }
 \arguments{
@@ -30,7 +30,7 @@ addDataFrame(x, sheet, col.names=TRUE, row.names=TRUE,
   \item{colStyle}{a list of \code{\link{CellStyle}}.  If the name of the
      list element is the column number, it will be used to set the style
      of the column.  Columns of type \code{Date} and \code{POSIXct} are
-     styled automatically.}
+     styled automatically even if \code{colSyle=NULL}.}
    
   \item{colnamesStyle}{a \code{\link{CellStyle}} object to customize the
     table header.}
@@ -44,12 +44,16 @@ addDataFrame(x, sheet, col.names=TRUE, row.names=TRUE,
   
   \item{characterNA}{a string value to control how character NA will be
     shown in the spreadsheet.}
+
+  \item{byrow}{a logical value indicating if the data.frame should be
+    added to the sheet in row wise fashion.}
 }
 
 \details{
-  Internally this function uses Java internally for looping and the
-  result is a significant improvement in performance compared with a
-  cell by cell application of \code{\link{setCellValue}}. 
+  Starting with version 0.5.0 this function uses the functionality
+  provided by \code{CellBlock} which results in a significant
+  improvement in performance compared with a cell by cell application of
+  \code{\link{setCellValue}} and with other previous atempts.
   
   It is difficult to treat \code{NA}'s consistently between R
   and Excel via Java.  Most likely, users of Excel will want to see

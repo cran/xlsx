@@ -1,6 +1,6 @@
-# 
+# Useful when you have a "fat" spreadsheet (few rows and many columns.) 
 #
-# For CellType: FORMULA, ERROR or blanks, it defaults to "character"
+# Only reads Strings for now.
 #
 #
 
@@ -15,14 +15,9 @@ readRows <- function(sheet, startRow, endRow, startColumn,
   if (is.null(endColumn))     # get it from the first row 
     endColumn <- trueEndColumn
   
-  ## if (endColumn > trueEndColumn) {
-  ##   warning(paste("First row requested has only", trueEndColumn, "columns."))
-  ##   endColumn <- min(endColumn, trueEndColumn)
-  ## }
-  
   noRows <- endRow - startRow + 1
 
-  Rintf <- .jnew("dev/RInterface")  # create an interface object 
+  Rintf <- .jnew("org/cran/rexcel/RInterface")  # create an interface object 
   
   res <- matrix(NA, nrow=noRows, ncol=endColumn-startColumn+1)
   for (i in seq_len(noRows)) {
@@ -38,3 +33,8 @@ readRows <- function(sheet, startRow, endRow, startColumn,
 }
 
 
+  ## if (endColumn > trueEndColumn) {
+  ##   warning(paste("First row requested has only", trueEndColumn, "columns."))
+  ##   endColumn <- min(endColumn, trueEndColumn)
+  ## }
+  
