@@ -513,6 +513,12 @@ test.ranges <- function(wb)
   res2 <- read.xlsx2(file, sheetName="ragged")
   res  <- read.xlsx(file, sheetName="ragged", colIndex=1:4)  
 
+  cat("  read rowIndex with read.xlsx\n")
+  # reported bug in 0.5.1, fixed on 6/20/2013
+  res <- read.xlsx(file, sheetName="all", colIndex=3:6, rowIndex=3:7)
+  if (nrow(res) != 4) stop("read rowIndex with read.xlsx failed")
+
+  
   cat("Done.\n")
 }
 
@@ -568,9 +574,9 @@ test.ranges <- function(wb)
     endRow=7)
   stopifnot(nrow(res)==4)
 
-  cat("  readColumns for more cols than data\n")
-  res <- readColumns(sheet, 1, 14, 3)
-  stopifnot(ncol(res)==14)
+  ## cat("  readColumns for more cols than data\n")
+  ## res <- readColumns(sheet, startColumn=1, endColumn=14, startRow=3)
+  ## stopifnot(ncol(res)==14)
 
   cat("  readColumns for formulas and NAs\n")
   sheet <- sheets[["NAs"]]
@@ -593,6 +599,7 @@ test.ranges <- function(wb)
 
 
 #####################################################################
+# a spreadsheet with many sheets
 #
 .main_lowlevel_export <- function(ext="xlsx")
 {
@@ -610,8 +617,7 @@ test.ranges <- function(wb)
   test.addDataFrame(wb)
   #test.pageBreaks(wb)    # not working with 3.7, fixed in 3.8
   test.cellBlock(wb)
-  
-  
+   
   saveWorkbook(wb, outfile)
   
   cat("Wrote file", outfile, "\n\n")
@@ -657,11 +663,11 @@ test.ranges <- function(wb)
   }
   thisFile <- paste(SOURCEDIR, "rexcel/trunk/inst/tests/",
     "lib_tests_xlsx.R", sep="")
-  source(paste(SOURCEDIR, "rexcel/trunk/R/utilities.R", sep=""))
-  source(paste(SOURCEDIR, "rexcel/trunk/R/addDataFrame.R", sep=""))
-  source(paste(SOURCEDIR, "rexcel/trunk/R/readColumns.R", sep=""))
-  source(paste(SOURCEDIR, "rexcel/trunk/R/read.xlsx2.R", sep=""))
-  source(paste(SOURCEDIR, "rexcel/trunk/R/write.xlsx2.R", sep=""))
+  #source(paste(SOURCEDIR, "rexcel/trunk/R/utilities.R", sep=""))
+  #source(paste(SOURCEDIR, "rexcel/trunk/R/addDataFrame.R", sep=""))
+  #source(paste(SOURCEDIR, "rexcel/trunk/R/readColumns.R", sep=""))
+  #source(paste(SOURCEDIR, "rexcel/trunk/R/read.xlsx2.R", sep=""))
+  #source(paste(SOURCEDIR, "rexcel/trunk/R/write.xlsx2.R", sep=""))
   source(thisFile)
 
 

@@ -1,18 +1,16 @@
 Package: xlsx
 Type: Package
 Title: Read, write, format Excel 2007 and Excel 97/2000/XP/2003 files
-Version: 0.5.1
-Date: 2012-03-31
-Depends: xlsxjars, rJava
-Imports: xlsxjars, rJava
+Version: 0.5.5
+Date: 2012-12-01
+Depends: rJava, xlsxjars
 LazyLoad: yes
 Author: Adrian A. Dragulescu
 Maintainer: Adrian A. Dragulescu <adrian.dragulescu@gmail.com>
-Description: Provide R functions to read/write/format Excel 2007 and
-        Excel 97/2000/XP/2003 file formats.
+Description: Provide R functions to read/write/format Excel 2007 and Excel 97/2000/XP/2003 file formats.
 License: GPL-3
 URL: http://code.google.com/p/rexcel/
-Packaged: 2013-05-20 22:18:52 UTC; adrian
+Packaged: 2013-12-10 22:29:24 UTC; adrian
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2013-05-21 00:32:32
+Date/Publication: 2013-12-10 23:42:18

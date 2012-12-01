@@ -57,9 +57,10 @@ CB.setBorder( cellBlock, border, rowIndex, colIndex)
   the block.}
   
   \item{create}{ If \code{TRUE} cells will be created if they don't
-    exist, if \code{FALSE} only existing cells will be used.  Use
-    \code{TRUE} if you want to blank out an existing cell block.  Use
-    \code{FALSE} if you want to reuse/restyle existing cells.}
+    exist, if \code{FALSE} only existing cells will be used.  If cells
+    don't exist, you have to use \code{TRUE}.  Use \code{TRUE} if you
+    want to blank out an existing cell block.  Use \code{FALSE} if you
+    want to reuse/restyle existing cells.}
   
   \item{cellBlock}{ a cell block object as returned by
     \code{\link{CellBlock}}. }
@@ -108,6 +109,11 @@ CB.setBorder( cellBlock, border, rowIndex, colIndex)
   same value.  An exception is made when either \code{rowIndex} or
   \code{colIndex} have length one, when they will be expanded internally
   to match the length of the other index.
+
+  Function \code{CB.setMatrixData} works for numeric or character
+  matrices.  If the matrix \code{x} is not of numeric type it will be
+  converted to a character matrix.
+  
   
 }
 
