@@ -31,7 +31,7 @@
   to use the package.  
 
   Please see \url{http://code.google.com/p/rexcel/} for a Wiki and the
-  development version.  To report a bug, please use the Issues page at
+  development version.  To report a bug, use the Issues page at
   \url{https://code.google.com/p/rexcel/issues/list}.  Questions should
   be asked on the dedicated mailing list at
   \url{http://groups.google.com/group/R-package-xlsx}.
@@ -41,8 +41,8 @@
 \tabular{ll}{
 Package: \tab xlsx\cr
 Type: \tab Package\cr
-Version: \tab 0.5.5\cr
-Date: \tab 2013-12-01\cr
+Version: \tab 0.5.7\cr
+Date: \tab 2014-08-01\cr
 License: \tab GPL-3\cr
 }
 
@@ -77,7 +77,7 @@ file <- system.file("tests", "test_import.xlsx", package = "xlsx")
 res <- read.xlsx(file, 2)  # read the second sheet
 
 # example of writing xlsx sheets
-file <- tempfile()
+file <- paste(tempfile(), "xlsx", sep=".")
 write.xlsx(USArrests, file=file)
 
 }
