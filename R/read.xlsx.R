@@ -4,12 +4,12 @@
 read.xlsx <- function(file, sheetIndex, sheetName=NULL,
   rowIndex=NULL, startRow=NULL, endRow=NULL, colIndex=NULL,
   as.data.frame=TRUE, header=TRUE, colClasses=NA,
-  keepFormulas=FALSE, encoding="unknown", ...)
+  keepFormulas=FALSE, encoding="unknown", password=NULL, ...)
 {
   if (is.null(sheetName) & missing(sheetIndex))
     stop("Please provide a sheet name OR a sheet index.")
-
-  wb <- loadWorkbook(file)
+    
+  wb <- loadWorkbook(file, password=password)
   sheets <- getSheets(wb)
   sheet  <- if (is.null(sheetName)) {
     sheets[[sheetIndex]]
@@ -81,6 +81,7 @@ read.xlsx <- function(file, sheetIndex, sheetName=NULL,
       }
       if (!is.na(colClasses[ic]))
         suppressWarnings(class(aux) <- colClasses[ic])  # if it gets specified
+      
       res[[ic]] <- aux
     }
 
