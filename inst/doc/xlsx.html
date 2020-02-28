@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -13,7 +12,7 @@
 
 <meta name="author" content="Adrian A. Dragulescu" />
 
-<meta name="date" content="2020-02-11" />
+<meta name="date" content="2020-02-26" />
 
 <title>Build Excel Reports from R</title>
 
@@ -228,7 +227,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Build Excel Reports from R</h1>
 <h4 class="author">Adrian A. Dragulescu</h4>
-<h4 class="date">2020-02-11</h4>
+<h4 class="date">2020-02-26</h4>
 <div class="abstract">
 <p class="abstract">Abstract</p>
 The <code>xlsx</code> package provides tools neccessary to interact with Excel 2007 files from R. The user can read and write xlsx files, and can control the appearance of the spreadsheet by setting data formats, fonts, colors, borders. Set the print area, the zoom control, create split and freeze panels, adding headers and footers. The package uses a java library from the Apache POI project.
@@ -249,8 +248,8 @@ The <code>xlsx</code> package provides tools neccessary to interact with Excel 2
 
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
-<p>The package <code>xlsx</code> makes possible to interact with Excel 2007 files from R <code>r Cite(bib,'R-base')</code>. While a power R user usually does not need to use Excel or even avoids it altogether, there are cases when being able to generate Excel output or read Excel files into R is a must. One such case is in an office environment when you need to collaborate with co-workers who use Excel as their primary tool. Another case is to use Excel for basic reporting of results. For moderate data sets, the formatting capabilities of Excel can prove useful. A flexible way to manipulate Excel 2007 xlsx files from R would then be a nice addition.</p>
-<p>The <code>xlsx</code> package focuses on Excel 2007 because for Excel 97 there are already several solutions, <code>RODBC</code> <a name="cite-RODBC"></a>[<a href="https://CRAN.R-project.org/package=RODBC">1</a>], <code>readxl``r Cite(bib,'readxl')</code>, etc. While some of these packages work with Excel 2007 files too, the contribution of the <code>xlsx</code> package is different.</p>
+<p>The package <code>xlsx</code> makes possible to interact with Excel 2007 files from R <code>r Cite(bib,&#39;R-base&#39;)</code>. While a power R user usually does not need to use Excel or even avoids it altogether, there are cases when being able to generate Excel output or read Excel files into R is a must. One such case is in an office environment when you need to collaborate with co-workers who use Excel as their primary tool. Another case is to use Excel for basic reporting of results. For moderate data sets, the formatting capabilities of Excel can prove useful. A flexible way to manipulate Excel 2007 xlsx files from R would then be a nice addition.</p>
+<p>The <code>xlsx</code> package focuses on Excel 2007 because for Excel 97 there are already several solutions, <code>RODBC</code> <a name="cite-RODBC"></a>[<a href="https://CRAN.R-project.org/package=RODBC">1</a>], <code>readxl``r Cite(bib,&#39;readxl&#39;)</code>, etc. While some of these packages work with Excel 2007 files too, the contribution of the <code>xlsx</code> package is different.</p>
 <p>The xlsx Excel 2007 file format is essentially a zipped set of xml files. It is possible to interact directly with these files from R as shown by the package <code>RExcelXML</code><a name="cite-RExcelXML"></a>[<a href="http://www.omegahat.net/RExcelXML/">2</a>]. All the functionality of the <code>xlsx</code> package can be replicated with <code>RExcelXML</code> package or by extending it. Working directly with the zipped xml files, and using the xml schema to extract the useful information into R gives you ultimate control.</p>
 <p>The approach taken in the <code>xlsx</code> package is to use a proven, existing API between Java and Excel 2007 and use the <code>rJava</code> <a name="cite-rJava"></a>[<a href="https://CRAN.R-project.org/package=rJava">3</a>] package to link Java and R. The advantage of this approach is that the code on the R side is very compact, easy to maintain, and easy to extend even for people with little Java experience. All the heavy lifting of parsing XML schemas is being done in Java. We also benefit from a mature software project with many developers, test suites, and users that report issues on the Java side. In principle, this should make the maintainance of the <code>xlsx</code> package easy. The Java API used by the <code>xlsx</code> is one project of the Apache Software Foundation, called Apache POI and can be found at <a href="http://poi.apache.org/">http://poi.apache.org/</a>.</p>
 <p>The Apache POI Project’s mission is to create and maintain Java APIs for manipulating various file formats based upon the Office Open XML standards (OOXML) and Microsoft’s OLE 2 Compound Document format (OLE2). These include Excel, Word, and PowerPoint documents. While the focus of the <code>xlsx</code> package has been only on Excel files, extensions for Word and PowerPoint documents are available in the <a href="https://CRAN.R-project.org/package=ReporteRs">ReporteRs</a> package.</p>

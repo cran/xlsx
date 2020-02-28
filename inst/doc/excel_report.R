@@ -1,9 +1,9 @@
-## ----setup, echo=FALSE, message=FALSE------------------------------------
+## ----setup, echo=FALSE, message=FALSE-----------------------------------------
 knitr::opts_chunk$set(echo=TRUE, collapse=T, comment='#>')
 library(rJava)
 library(xlsx)
 
-## ----theme---------------------------------------------------------------
+## ----theme--------------------------------------------------------------------
 
 ## fonts require a workbook
 createFonts <- function(wb) {
@@ -27,11 +27,11 @@ fillPrimary <- Fill('#cc0000','#cc0000','SOLID_FOREGROUND')
 fillSecondary <- Fill('#ff6666','#ff6666','SOLID_FOREGROUND')
 
 
-## ----prep_for_report, include=FALSE--------------------------------------
+## ----prep_for_report, include=FALSE-------------------------------------------
 ## todo: fix the xlsx jars being available when generating vignette
 #.jaddClassPath(rprojroot::is_r_package$find_file('inst/java/rexcel-0.5.1.jar'))
 
-## ----build_report, results='hide'----------------------------------------
+## ----build_report, results='hide'---------------------------------------------
 ## The dataset
 numbercol <- 9
 mydata <- as.data.frame(lapply(1:numbercol,function(x){runif(15, 0,200)}))
