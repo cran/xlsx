@@ -16,7 +16,7 @@
 #' The default formats for Date and DateTime columns can be changed via the two
 #' package options \code{xlsx.date.format} and \code{xlsx.datetime.format}.
 #' They need to be specified in Java date format
-#' \url{http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html}.
+#' \url{https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html}.
 #'
 #' @param x a \code{data.frame}.
 #' @param sheet a \code{\link{Sheet}} object.
@@ -160,7 +160,7 @@ addDataFrame <- function(x, sheet, col.names=TRUE, row.names=TRUE,
         aux[haveNA] <- characterNA
 
       # Excel max cell size limit
-      if (max(nchar(aux)) > .EXCEL_LIMIT_MAX_CHARS_IN_CELL) {
+      if (!all(is.na(aux)) && max(nchar(aux), na.rm = TRUE) > .EXCEL_LIMIT_MAX_CHARS_IN_CELL) {
           warning(sprintf("Some cells exceed Excel's limit of %d characters and they will be truncated",
                           .EXCEL_LIMIT_MAX_CHARS_IN_CELL))
           aux <- strtrim(aux, .EXCEL_LIMIT_MAX_CHARS_IN_CELL)
